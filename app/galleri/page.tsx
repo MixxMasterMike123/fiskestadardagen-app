@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import Header from '@/components/Header'
 import GalleryMap from '@/components/GalleryMap'
 import SocialShare from '@/components/SocialShare'
+import ImageLightbox from '@/components/ImageLightbox'
 import { getSubmissions } from '@/lib/submissions'
 import { Submission } from '@/types'
 import { calculateImpactStats, formatNumber, getImpactMessage } from '@/lib/statistics'
@@ -12,6 +13,19 @@ import { MapPin, Calendar, TrendingUp } from 'lucide-react'
 export default function GalleryPage() {
   const [submissions, setSubmissions] = useState<Submission[]>([])
   const [loading, setLoading] = useState(true)
+  const [lightboxImages, setLightboxImages] = useState<string[]>([])
+  const [lightboxIndex, setLightboxIndex] = useState(0)
+  const [lightboxOpen, setLightboxOpen] = useState(false)
+
+  const openLightbox = (images: string[], index: number) => {
+    setLightboxImages(images)
+    setLightboxIndex(index)
+    setLightboxOpen(true)
+  }
+
+  const closeLightbox = () => {
+    setLightboxOpen(false)
+  }
 
   const getQuantityLabel = (category: string, quantity: string) => {
     // Lines - show in meters
@@ -145,7 +159,7 @@ export default function GalleryPage() {
                                 src={submission.images[0]}
                                 alt="Återvunnen fiskeutrustning"
                                 className="w-full h-40 md:h-48 object-cover rounded-lg cursor-pointer hover:opacity-95 transition-opacity"
-                                onClick={() => window.open(submission.images[0], '_blank')}
+                                onClick={() => openLightbox(submission.images, 0)}
                               />
                               {submission.images.length > 1 && (
                                 <div className="grid grid-cols-3 gap-1">
@@ -155,7 +169,7 @@ export default function GalleryPage() {
                                       src={image}
                                       alt={`Bild ${index + 2}`}
                                       className="w-full h-12 md:h-16 object-cover rounded cursor-pointer hover:opacity-95 transition-opacity"
-                                      onClick={() => window.open(image, '_blank')}
+                                      onClick={() => openLightbox(submission.images, index + 1)}
                                     />
                                   ))}
                                   {submission.images.length > 4 && (
@@ -306,7 +320,7 @@ export default function GalleryPage() {
                                 src={submission.images[0]}
                                 alt="Återvunnen fiskeutrustning"
                                 className="w-full h-40 md:h-48 object-cover rounded-lg cursor-pointer hover:opacity-95 transition-opacity"
-                                onClick={() => window.open(submission.images[0], '_blank')}
+                                onClick={() => openLightbox(submission.images, 0)}
                               />
                               {submission.images.length > 1 && (
                                 <div className="grid grid-cols-3 gap-1">
@@ -316,7 +330,7 @@ export default function GalleryPage() {
                                       src={image}
                                       alt={`Bild ${index + 2}`}
                                       className="w-full h-12 md:h-16 object-cover rounded cursor-pointer hover:opacity-95 transition-opacity"
-                                      onClick={() => window.open(image, '_blank')}
+                                      onClick={() => openLightbox(submission.images, index + 1)}
                                     />
                                   ))}
                                   {submission.images.length > 4 && (
@@ -406,6 +420,14 @@ export default function GalleryPage() {
           )}
         </div>
       </main>
+      
+      {/* Image Lightbox */}
+      <ImageLightbox
+        images={lightboxImages}
+        initialIndex={lightboxIndex}
+        isOpen={lightboxOpen}
+        onClose={closeLightbox}
+      />
     </div>
   )
 } 
