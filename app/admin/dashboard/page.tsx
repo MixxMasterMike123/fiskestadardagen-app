@@ -8,6 +8,7 @@ import { getSubmissions, updateSubmissionStatus, deleteSubmission } from '@/lib/
 import { Submission } from '@/types'
 import Header from '@/components/Header'
 import AdminMap from '@/components/AdminMap'
+import ImpactDashboard from '@/components/ImpactDashboard'
 import { CheckCircle, XCircle, Trash2, Eye, Calendar, MapPin, Phone, Mail, User } from 'lucide-react'
 
 export default function AdminDashboard() {
@@ -15,7 +16,7 @@ export default function AdminDashboard() {
   const [pendingSubmissions, setPendingSubmissions] = useState<Submission[]>([])
   const [approvedSubmissions, setApprovedSubmissions] = useState<Submission[]>([])
   const [loading, setLoading] = useState(true)
-  const [selectedTab, setSelectedTab] = useState<'pending' | 'approved' | 'all' | 'map'>('pending')
+  const [selectedTab, setSelectedTab] = useState<'pending' | 'approved' | 'all' | 'map' | 'statistics'>('pending')
   const router = useRouter()
 
   const getQuantityLabel = (category: string, quantity: string) => {
@@ -125,6 +126,8 @@ export default function AdminDashboard() {
         return submissions
       case 'map':
         return submissions
+      case 'statistics':
+        return submissions
       default:
         return pendingSubmissions
     }
@@ -220,6 +223,16 @@ export default function AdminDashboard() {
               >
                 Karta
               </button>
+              <button
+                onClick={() => setSelectedTab('statistics')}
+                className={`py-2 px-1 border-b-2 font-medium text-sm ${
+                  selectedTab === 'statistics'
+                    ? 'border-accent text-accent'
+                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                }`}
+              >
+                Statistik
+              </button>
             </nav>
           </div>
 
@@ -227,6 +240,10 @@ export default function AdminDashboard() {
           {selectedTab === 'map' ? (
             <div className="mb-8">
               <AdminMap submissions={submissions} />
+            </div>
+          ) : selectedTab === 'statistics' ? (
+            <div className="mb-8">
+              <ImpactDashboard submissions={submissions} />
             </div>
           ) : (
             /* Submissions List */

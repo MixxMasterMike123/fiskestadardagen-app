@@ -6,7 +6,8 @@ import GalleryMap from '@/components/GalleryMap'
 import SocialShare from '@/components/SocialShare'
 import { getSubmissions } from '@/lib/submissions'
 import { Submission } from '@/types'
-import { MapPin, Calendar } from 'lucide-react'
+import { calculateImpactStats, formatNumber, getImpactMessage } from '@/lib/statistics'
+import { MapPin, Calendar, TrendingUp } from 'lucide-react'
 
 export default function GalleryPage() {
   const [submissions, setSubmissions] = useState<Submission[]>([])
@@ -61,6 +62,8 @@ export default function GalleryPage() {
     }
   }
 
+  const stats = calculateImpactStats(submissions)
+
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-50">
@@ -78,7 +81,7 @@ export default function GalleryPage() {
       
       <main className="py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-12">
+          <div className="text-center mb-8">
             <h1 className="text-4xl font-bold text-gray-900 sm:text-5xl">
               Återvinningsgalleri
             </h1>
@@ -86,6 +89,40 @@ export default function GalleryPage() {
               Här kan du se all fiskeutrustning som har återvunnits från våra vatten av fantastiska volontärer.
             </p>
           </div>
+
+          {/* Impact Summary */}
+          {stats.totalSubmissions > 0 && (
+            <div className="mb-8">
+              <div className="bg-gradient-to-r from-green-500 to-blue-600 rounded-xl p-6 text-white">
+                <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center space-x-3">
+                    <TrendingUp className="h-6 w-6" />
+                    <h2 className="text-xl font-bold">Total miljöpåverkan</h2>
+                  </div>
+                  <div className="text-2xl">🌊</div>
+                </div>
+                
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div className="bg-white/10 rounded-lg p-4 backdrop-blur-sm">
+                    <div className="text-2xl font-bold">{stats.totalSubmissions}</div>
+                    <div className="text-green-100">Godkända rapporter</div>
+                  </div>
+                  <div className="bg-white/10 rounded-lg p-4 backdrop-blur-sm">
+                    <div className="text-2xl font-bold">{formatNumber(stats.estimatedTotalPieces)}</div>
+                    <div className="text-green-100">Uppskattade delar</div>
+                  </div>
+                  <div className="bg-white/10 rounded-lg p-4 backdrop-blur-sm">
+                    <div className="text-2xl font-bold">{Math.round(stats.lineMeters + stats.netCount)}</div>
+                    <div className="text-green-100">Meter lina + nät</div>
+                  </div>
+                </div>
+                
+                <div className="mt-4 text-green-100 text-sm">
+                  🎯 {getImpactMessage(stats)}
+                </div>
+              </div>
+            </div>
+          )}
           
           {submissions.length === 0 ? (
             <div className="text-center py-20">
