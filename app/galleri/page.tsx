@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import Header from '@/components/Header'
 import GalleryMap from '@/components/GalleryMap'
+import SocialShare from '@/components/SocialShare'
 import { getSubmissions } from '@/lib/submissions'
 import { Submission } from '@/types'
 import { MapPin, Calendar } from 'lucide-react'
@@ -117,11 +118,12 @@ export default function GalleryPage() {
                         </p>
                       )}
                       
-                      {/* Contributor */}
-                      <div className="border-t pt-3">
+                      {/* Contributor and Share */}
+                      <div className="border-t pt-3 flex items-center justify-between">
                         <p className="text-xs text-gray-500">
                           Rapporterad av: <span className="font-medium">{submission.name}</span>
                         </p>
+                        <SocialShare submission={submission} />
                       </div>
                     </div>
                   ))}
