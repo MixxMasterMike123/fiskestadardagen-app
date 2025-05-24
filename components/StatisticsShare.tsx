@@ -167,7 +167,7 @@ Tillsammans håller vi våra svenska vatten rena! Varje bortplockat nät och kro
                   className="w-full flex items-center space-x-3 p-2 rounded-lg hover:bg-gray-50 transition-colors"
                 >
                   <Share2 className="h-5 w-5 text-gray-600" />
-                  <span className="text-sm">Dela statistik...</span>
+                  <span className="text-sm text-gray-900">Dela statistik...</span>
                 </button>
               )}
               
@@ -211,7 +211,7 @@ Tillsammans håller vi våra svenska vatten rena! Varje bortplockat nät och kro
                 onClick={() => setIsOpen(false)}
               >
                 <Twitter className="h-5 w-5 text-gray-800" />
-                <span className="text-sm">X (Twitter)</span>
+                <span className="text-sm text-gray-900">X (Twitter)</span>
               </a>
               
               {/* WhatsApp */}
@@ -223,7 +223,7 @@ Tillsammans håller vi våra svenska vatten rena! Varje bortplockat nät och kro
                 onClick={() => setIsOpen(false)}
               >
                 <MessageCircle className="h-5 w-5 text-green-600" />
-                <span className="text-sm">WhatsApp</span>
+                <span className="text-sm text-gray-900">WhatsApp</span>
               </a>
               
               {/* Copy Link */}
@@ -236,7 +236,7 @@ Tillsammans håller vi våra svenska vatten rena! Varje bortplockat nät och kro
                 ) : (
                   <Copy className="h-5 w-5 text-gray-600" />
                 )}
-                <span className="text-sm">
+                <span className="text-sm text-gray-900">
                   {copied ? 'Kopierat!' : 'Kopiera text & länk'}
                 </span>
               </button>
@@ -244,11 +244,11 @@ Tillsammans håller vi våra svenska vatten rena! Varje bortplockat nät och kro
             
             {/* Preview */}
             <div className="mt-3 p-2 bg-gray-50 rounded text-xs text-gray-600 border-t">
-              <strong>Förhandsvisning:</strong>
+              <strong className="text-gray-800">Förhandsvisning:</strong>
               <br />
-              {previewText}
+              <span className="text-gray-700">{previewText}</span>
               <div className="mt-1 flex items-center">
-                <span>🔗 Länk till galleri inkluderad</span>
+                <span className="text-gray-600">🔗 Länk till galleri inkluderad</span>
               </div>
             </div>
           </div>
