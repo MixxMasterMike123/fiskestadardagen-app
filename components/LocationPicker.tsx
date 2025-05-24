@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
-import { Loader } from '@googlemaps/js-api-loader'
+import { loadGoogleMaps } from '@/lib/googleMaps'
 import { MapPin, Search } from 'lucide-react'
 
 interface LocationPickerProps {
@@ -19,16 +19,8 @@ export default function LocationPicker({ onLocationSelect, initialLocation }: Lo
 
   useEffect(() => {
     const initMap = async () => {
-      const loader = new Loader({
-        apiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY!,
-        version: 'weekly',
-        libraries: ['places', 'marker'],
-        region: 'SE',
-        language: 'sv'
-      })
-
       try {
-        await loader.load()
+        await loadGoogleMaps()
         setIsLoaded(true)
 
         if (mapRef.current) {
@@ -39,7 +31,6 @@ export default function LocationPicker({ onLocationSelect, initialLocation }: Lo
             center: swedenCenter,
             zoom: 5,
             mapTypeId: 'terrain',
-            mapId: 'DEMO_MAP_ID', // Required for AdvancedMarkerElement
             styles: [
               {
                 featureType: 'water',

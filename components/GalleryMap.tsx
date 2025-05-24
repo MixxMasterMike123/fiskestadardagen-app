@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
-import { Loader } from '@googlemaps/js-api-loader'
+import { loadGoogleMaps } from '@/lib/googleMaps'
 import { Submission } from '@/types'
 
 interface GalleryMapProps {
@@ -15,16 +15,8 @@ export default function GalleryMap({ submissions }: GalleryMapProps) {
 
   useEffect(() => {
     const initMap = async () => {
-      const loader = new Loader({
-        apiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY!,
-        version: 'weekly',
-        libraries: ['places'],
-        region: 'SE',
-        language: 'sv'
-      })
-
       try {
-        await loader.load()
+        await loadGoogleMaps()
         setIsLoaded(true)
 
         if (mapRef.current) {
