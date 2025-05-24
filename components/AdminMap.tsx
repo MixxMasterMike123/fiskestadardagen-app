@@ -135,7 +135,7 @@ export default function AdminMap({ submissions }: AdminMapProps) {
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
-        <h3 className="text-lg font-semibold text-gray-900">Inlämningar på karta</h3>
+        <h3 className="text-lg font-semibold text-gray-900">Rapporter på karta</h3>
         <div className="flex items-center space-x-4 text-sm">
           <div className="flex items-center space-x-1">
             <div className="w-3 h-3 rounded-full bg-[#ee7e30]"></div>
@@ -172,7 +172,7 @@ export default function AdminMap({ submissions }: AdminMapProps) {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div className="bg-green-50 border border-green-200 rounded-lg p-4">
           <h4 className="font-medium text-green-800 mb-2">
-            {submissionsWithCoords.length} inlämningar med platsdata
+            {submissionsWithCoords.length} rapporter med platsdata
           </h4>
           <p className="text-sm text-green-700">
             Visas som markörer på kartan ovan
@@ -182,10 +182,10 @@ export default function AdminMap({ submissions }: AdminMapProps) {
         {submissionsWithoutCoords.length > 0 && (
           <div className="bg-orange-50 border border-orange-200 rounded-lg p-4">
             <h4 className="font-medium text-orange-800 mb-2">
-              {submissionsWithoutCoords.length} inlämningar utan platsdata
+              {submissionsWithoutCoords.length} rapporter utan platsdata
             </h4>
             <p className="text-sm text-orange-700">
-              Dessa inlämningar gjordes före kartfunktionen implementerades
+              Dessa rapporter gjordes före kartfunktionen implementerades
             </p>
           </div>
         )}

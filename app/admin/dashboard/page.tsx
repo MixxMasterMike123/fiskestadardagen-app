@@ -38,7 +38,7 @@ export default function AdminDashboard() {
       setPendingSubmissions(pendingSubs)
       setApprovedSubmissions(approvedSubs)
     } catch (error) {
-      toast.error('Fel vid laddning av inlämningar')
+      toast.error('Fel vid laddning av rapporter')
     } finally {
       setLoading(false)
     }
@@ -47,7 +47,7 @@ export default function AdminDashboard() {
   const handleApprove = async (id: string) => {
     try {
       await updateSubmissionStatus(id, 'approved')
-      toast.success('Inlämning godkänd!')
+      toast.success('Rapport godkänd!')
       loadSubmissions()
     } catch (error) {
       toast.error('Fel vid godkännande')
@@ -57,7 +57,7 @@ export default function AdminDashboard() {
   const handleReject = async (id: string) => {
     try {
       await updateSubmissionStatus(id, 'rejected')
-      toast.success('Inlämning avvisad')
+      toast.success('Rapport avvisad')
       loadSubmissions()
     } catch (error) {
       toast.error('Fel vid avvisning')
@@ -65,10 +65,10 @@ export default function AdminDashboard() {
   }
 
   const handleDelete = async (id: string) => {
-    if (confirm('Är du säker på att du vill ta bort denna inlämning permanent?')) {
+    if (confirm('Är du säker på att du vill ta bort denna rapport permanent?')) {
       try {
         await deleteSubmission(id)
-        toast.success('Inlämning borttagen')
+        toast.success('Rapport borttagen')
         loadSubmissions()
       } catch (error) {
         toast.error('Fel vid borttagning')
@@ -117,7 +117,7 @@ export default function AdminDashboard() {
           <div className="flex justify-between items-center mb-8">
             <div>
               <h1 className="text-3xl font-bold text-gray-900">Administratörspanel</h1>
-              <p className="text-gray-600">Hantera inlämningar av återvunnen fiskeutrustning</p>
+              <p className="text-gray-600">Hantera rapporter av återvunnen fiskeutrustning</p>
             </div>
             <button
               onClick={handleLogout}
@@ -131,15 +131,15 @@ export default function AdminDashboard() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
             <div className="card text-center">
               <div className="text-3xl font-bold text-accent">{pendingSubmissions.length}</div>
-              <div className="text-gray-600">Väntande inlämningar</div>
+              <div className="text-gray-600">Väntande rapporter</div>
             </div>
             <div className="card text-center">
               <div className="text-3xl font-bold text-green-600">{approvedSubmissions.length}</div>
-              <div className="text-gray-600">Godkända inlämningar</div>
+              <div className="text-gray-600">Godkända rapporter</div>
             </div>
             <div className="card text-center">
               <div className="text-3xl font-bold text-gray-600">{submissions.length}</div>
-              <div className="text-gray-600">Totalt inlämningar</div>
+              <div className="text-gray-600">Totalt rapporter</div>
             </div>
           </div>
 
@@ -199,7 +199,7 @@ export default function AdminDashboard() {
             <div className="space-y-6">
               {getCurrentSubmissions().length === 0 ? (
                 <div className="text-center py-12">
-                  <p className="text-xl text-gray-600">Inga inlämningar att visa</p>
+                  <p className="text-xl text-gray-600">Inga rapporter att visa</p>
                 </div>
               ) : (
                 getCurrentSubmissions().map((submission) => (
@@ -211,7 +211,7 @@ export default function AdminDashboard() {
                           <div className="grid gap-2">
                             <img
                               src={submission.images[0]}
-                              alt="Inlämning"
+                              alt="Rapport"
                               className="w-full h-48 object-cover rounded-lg"
                             />
                             {submission.images.length > 1 && (
@@ -283,7 +283,7 @@ export default function AdminDashboard() {
                         <div className="flex items-center mb-4">
                           <Calendar className="h-4 w-4 text-gray-500 mr-2" />
                           <span className="text-sm text-gray-600">
-                            Inlämnad: {submission.createdAt.toLocaleDateString('sv-SE')} {submission.createdAt.toLocaleTimeString('sv-SE')}
+                            Rapporterad: {submission.createdAt.toLocaleDateString('sv-SE')} {submission.createdAt.toLocaleTimeString('sv-SE')}
                           </span>
                         </div>
 

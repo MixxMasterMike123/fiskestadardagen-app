@@ -55,7 +55,7 @@ export default function GalleryPage() {
           {submissions.length === 0 ? (
             <div className="text-center py-20">
               <p className="text-xl text-gray-600">
-                Inga godkända inlämningar än. Bli den första att bidra!
+                Inga godkända rapporter än. Bli den första att bidra!
               </p>
             </div>
           ) : (
@@ -120,7 +120,7 @@ export default function GalleryPage() {
                       {/* Contributor */}
                       <div className="border-t pt-3">
                         <p className="text-xs text-gray-500">
-                          Inlämnad av: <span className="font-medium">{submission.name}</span>
+                          Rapporterad av: <span className="font-medium">{submission.name}</span>
                         </p>
                       </div>
                     </div>

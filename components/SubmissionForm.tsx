@@ -222,7 +222,7 @@ export default function SubmissionForm() {
           {/* Privacy Notice */}
           <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
             <p className="text-xs text-gray-600">
-              Fyll i alla obligatoriska fält (*) för att kunna skicka inlämningen
+              Fyll i alla obligatoriska fält (*) för att kunna skicka rapporten
             </p>
           </div>
         </form>

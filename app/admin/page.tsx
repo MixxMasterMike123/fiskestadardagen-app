@@ -47,8 +47,8 @@ export default function AdminLoginPage() {
               <h1 className="text-2xl font-bold text-gray-900">
                 Administratörsinloggning
               </h1>
-              <p className="mt-2 text-gray-600">
-                Logga in för att hantera inlämningar
+              <p className="text-gray-600 text-center mb-8">
+                Logga in för att hantera rapporter
               </p>
             </div>
 
