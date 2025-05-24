@@ -71,19 +71,22 @@ export default function AdminMap({ submissions }: AdminMapProps) {
             icon: {
               url: submission.status === 'approved' ? 
                 'data:image/svg+xml,' + encodeURIComponent(`
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#10B981" width="32" height="32">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#ee7e30" width="32" height="32">
                     <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+                    <circle cx="12" cy="12" r="10" fill="none" stroke="white" stroke-width="1"/>
                   </svg>
                 `) :
                 submission.status === 'rejected' ?
                 'data:image/svg+xml,' + encodeURIComponent(`
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#EF4444" width="32" height="32">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#DC2626" width="32" height="32">
                     <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+                    <circle cx="12" cy="12" r="10" fill="none" stroke="white" stroke-width="1"/>
                   </svg>
                 `) :
                 'data:image/svg+xml,' + encodeURIComponent(`
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#F59E0B" width="32" height="32">
                     <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+                    <circle cx="12" cy="12" r="10" fill="none" stroke="white" stroke-width="1"/>
                   </svg>
                 `)
             }
@@ -97,8 +100,8 @@ export default function AdminMap({ submissions }: AdminMapProps) {
                 <p style="margin: 0 0 4px 0; color: #6b7280;"><strong>Plats:</strong> ${submission.location}</p>
                 <p style="margin: 0 0 4px 0; color: #6b7280;"><strong>Status:</strong> 
                   <span style="color: ${
-                    submission.status === 'approved' ? '#10B981' : 
-                    submission.status === 'rejected' ? '#EF4444' : '#F59E0B'
+                    submission.status === 'approved' ? '#ee7e30' : 
+                    submission.status === 'rejected' ? '#DC2626' : '#F59E0B'
                   }">
                     ${submission.status === 'approved' ? 'Godkänd' : 
                       submission.status === 'rejected' ? 'Avvisad' : 'Väntar'}
@@ -146,7 +149,7 @@ export default function AdminMap({ submissions }: AdminMapProps) {
         <h3 className="text-lg font-semibold text-gray-900">Inlämningar på karta</h3>
         <div className="flex items-center space-x-4 text-sm">
           <div className="flex items-center space-x-1">
-            <div className="w-3 h-3 rounded-full bg-green-500"></div>
+            <div className="w-3 h-3 rounded-full bg-[#ee7e30]"></div>
             <span>Godkänd ({submissions.filter(s => s.status === 'approved').length})</span>
           </div>
           <div className="flex items-center space-x-1">
@@ -154,7 +157,7 @@ export default function AdminMap({ submissions }: AdminMapProps) {
             <span>Väntar ({submissions.filter(s => s.status === 'pending').length})</span>
           </div>
           <div className="flex items-center space-x-1">
-            <div className="w-3 h-3 rounded-full bg-red-500"></div>
+            <div className="w-3 h-3 rounded-full bg-red-600"></div>
             <span>Avvisad ({submissions.filter(s => s.status === 'rejected').length})</span>
           </div>
         </div>

@@ -22,7 +22,7 @@ export default function LocationPicker({ onLocationSelect, initialLocation }: Lo
       const loader = new Loader({
         apiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY!,
         version: 'weekly',
-        libraries: ['places'],
+        libraries: ['places', 'marker'],
         region: 'SE',
         language: 'sv'
       })
@@ -39,6 +39,7 @@ export default function LocationPicker({ onLocationSelect, initialLocation }: Lo
             center: swedenCenter,
             zoom: 5,
             mapTypeId: 'terrain',
+            mapId: 'DEMO_MAP_ID', // Required for AdvancedMarkerElement
             styles: [
               {
                 featureType: 'water',
@@ -57,7 +58,7 @@ export default function LocationPicker({ onLocationSelect, initialLocation }: Lo
             }
           })
 
-          // Setup places autocomplete for search
+          // Setup places autocomplete for search - keep using the old API for now since new one is complex
           if (searchInputRef.current) {
             const autocomplete = new google.maps.places.Autocomplete(searchInputRef.current, {
               componentRestrictions: { country: 'se' },
