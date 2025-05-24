@@ -170,7 +170,7 @@ export default function EquipmentTracker({ onEquipmentChange }: Props) {
           <h4 className="font-medium text-gray-900 mb-3 text-sm md:text-base">Lägg till utrustning</h4>
           
           {/* Category Selection - Mobile Grid */}
-          <div className="mb-3 md:mb-4">
+          <div className="mb-2 md:mb-4">
             <label className="block text-xs md:text-sm font-medium text-gray-700 mb-2">
               Typ av utrustning *
             </label>
@@ -197,13 +197,13 @@ export default function EquipmentTracker({ onEquipmentChange }: Props) {
 
           {/* Quantity Selection - Mobile Optimized */}
           {currentEquipment.category && (
-            <div className="mb-3 md:mb-4">
+            <div className="mb-2 md:mb-4">
               <label className="block text-xs md:text-sm font-medium text-gray-700 mb-2">
                 {currentEquipment.category === 'lines' && 'Längd *'}
                 {currentEquipment.category === 'nets' && 'Antal nät *'}
                 {currentEquipment.category !== 'lines' && currentEquipment.category !== 'nets' && 'Ungefärlig mängd *'}
               </label>
-              <div className="grid grid-cols-1 gap-2">
+              <div className="grid grid-cols-2 gap-2">
                 {getQuantityOptions().map((quantity) => (
                   <button
                     key={quantity.value}
@@ -224,14 +224,14 @@ export default function EquipmentTracker({ onEquipmentChange }: Props) {
 
           {/* Description - Compact */}
           {currentEquipment.category && (
-            <div className="mb-3 md:mb-4">
-              <label className="block text-xs md:text-sm font-medium text-gray-700 mb-2">
+            <div className="mb-2 md:mb-4">
+              <label className="block text-xs md:text-sm font-medium text-gray-700 mb-1 md:mb-2">
                 Ytterligare detaljer (valfritt)
               </label>
               <textarea
                 value={currentEquipment.description || ''}
                 onChange={(e) => setCurrentEquipment({...currentEquipment, description: e.target.value})}
-                className="w-full px-2 md:px-3 py-2 border border-gray-300 rounded-md text-xs md:text-sm"
+                className="w-full px-2 md:px-3 py-1 md:py-2 border border-gray-300 rounded-md text-xs md:text-sm"
                 rows={2}
                 placeholder={
                   currentEquipment.category === 'lines' 
