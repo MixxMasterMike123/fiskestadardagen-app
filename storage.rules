@@ -1,0 +1,13 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    // Images in submissions folder
+    match /submissions/{allPaths=**} {
+      // Allow reading all images (for displaying in gallery and admin dashboard)
+      allow read: if true;
+      
+      // Allow writing for anonymous users (image uploads during submission)
+      allow write: if request.auth == null;
+    }
+  }
+} 
