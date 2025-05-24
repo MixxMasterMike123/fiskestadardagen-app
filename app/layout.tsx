@@ -2,14 +2,15 @@ import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
 import { Toaster } from 'react-hot-toast'
+import Footer from '../components/Footer'
 
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'Fiskeutrustning Återvinning',
-  description: 'Rapportera hittad fiskeutrustning för återvinning',
+  title: 'Fiskestädardagen - Fiskeutrustning Återvinning',
+  description: 'Rapportera hittad fiskeutrustning för återvinning och håll Sveriges vatten rena',
   icons: {
-    icon: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y=".9em" font-size="90">🎣</text></svg>',
+    icon: '/logos/fiskestadarna_logo.svg',
   },
 }
 
@@ -21,7 +22,12 @@ export default function RootLayout({
   return (
     <html lang="sv">
       <body className={inter.className}>
-        {children}
+        <div className="min-h-screen flex flex-col">
+          <div className="flex-1">
+            {children}
+          </div>
+          <Footer />
+        </div>
         <Toaster position="top-right" />
       </body>
     </html>
