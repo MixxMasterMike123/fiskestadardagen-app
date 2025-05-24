@@ -68,19 +68,25 @@ export default function GalleryMap({ submissions }: GalleryMapProps) {
                     url: 'data:image/svg+xml,' + encodeURIComponent(`
                       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#ee7e30" width="28" height="28">
                         <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
-                        <circle cx="12" cy="12" r="10" fill="none" stroke="white" stroke-width="1.5"/>
                       </svg>
                     `)
                   }
                 })
 
-                // Create info window with limited info for privacy
+                // Create info window with limited info for privacy and include image
                 const infoWindow = new google.maps.InfoWindow({
                   content: `
-                    <div style="max-width: 200px;">
+                    <div style="max-width: 250px;">
+                      ${submission.images.length > 0 ? `
+                        <img src="${submission.images[0]}" alt="Återvunnen utrustning" 
+                             style="width: 100%; height: 120px; object-fit: cover; border-radius: 8px; margin-bottom: 8px;" />
+                      ` : ''}
                       <h3 style="margin: 0 0 8px 0; color: #1f2937; font-size: 14px;">🎣 Återvunnen utrustning</h3>
                       <p style="margin: 0 0 4px 0; color: #6b7280; font-size: 12px;"><strong>Område:</strong> ${submission.location}</p>
-                      <p style="margin: 0; color: #6b7280; font-size: 11px;">
+                      ${submission.message ? `
+                        <p style="margin: 4px 0; color: #6b7280; font-size: 11px;"><strong>Beskrivning:</strong> ${submission.message.substring(0, 100)}${submission.message.length > 100 ? '...' : ''}</p>
+                      ` : ''}
+                      <p style="margin: 4px 0 0 0; color: #6b7280; font-size: 11px;">
                         <em>Ungefärlig plats för integritetsskydd</em>
                       </p>
                     </div>
