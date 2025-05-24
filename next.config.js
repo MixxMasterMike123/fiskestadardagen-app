@@ -1,7 +1,10 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  output: 'export',
+  trailingSlash: true,
   images: {
     domains: ['firebasestorage.googleapis.com'],
+    unoptimized: true,
   },
   webpack: (config, { isServer }) => {
     // Fix for Firebase/undici compatibility issue
