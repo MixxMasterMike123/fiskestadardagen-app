@@ -12,6 +12,40 @@ export default function GalleryPage() {
   const [submissions, setSubmissions] = useState<Submission[]>([])
   const [loading, setLoading] = useState(true)
 
+  const getQuantityLabel = (category: string, quantity: string) => {
+    // Lines - show in meters
+    if (category === 'lines') {
+      switch (quantity) {
+        case '1-5m': return '1-5 meter'
+        case '5-10m': return '5-10 meter'
+        case '10-20m': return '10-20 meter'
+        case '20m+': return '20+ meter'
+        default: return quantity
+      }
+    }
+    
+    // Nets - show specific counts
+    if (category === 'nets') {
+      switch (quantity) {
+        case '1': return '1 nät'
+        case '2': return '2 nät'
+        case '3': return '3 nät'
+        case '4': return '4 nät'
+        case 'more': return '5+ nät'
+        default: return quantity
+      }
+    }
+    
+    // Other equipment - show ranges
+    switch (quantity) {
+      case 'few': return 'Några få'
+      case 'many': return 'Flera'
+      case 'lots': return 'Många'
+      case 'huge_haul': return 'Extremt mycket'
+      default: return quantity
+    }
+  }
+
   useEffect(() => {
     loadSubmissions()
   }, [])
@@ -110,6 +144,39 @@ export default function GalleryPage() {
                           {submission.createdAt.toLocaleDateString('sv-SE')}
                         </span>
                       </div>
+                      
+                      {/* Equipment Info */}
+                      {submission.equipment && submission.equipment.length > 0 && (
+                        <div className="mb-3 space-y-1">
+                          {submission.equipment.map((equipment, index) => (
+                            <div key={index} className="p-2 bg-orange-50 border border-orange-200 rounded-lg">
+                              <div className="flex items-center text-sm">
+                                <span className="text-lg mr-2">
+                                  {equipment.category === 'hooks' && '🪝'}
+                                  {equipment.category === 'lures' && '🎣'}
+                                  {equipment.category === 'lines' && '🧵'}
+                                  {equipment.category === 'nets' && '🕸️'}
+                                  {equipment.category === 'weights' && '⚖️'}
+                                  {equipment.category === 'other' && '🔧'}
+                                </span>
+                                <div>
+                                  <span className="font-medium text-orange-800">
+                                    {equipment.category === 'hooks' && 'Krokar'}
+                                    {equipment.category === 'lures' && 'Beten/Drag'}
+                                    {equipment.category === 'lines' && 'Fiskelina'}
+                                    {equipment.category === 'nets' && 'Nät'}
+                                    {equipment.category === 'weights' && 'Vikter/Lod'}
+                                    {equipment.category === 'other' && 'Övrigt'}
+                                  </span>
+                                  <span className="text-orange-600 ml-2">
+                                    ({getQuantityLabel(equipment.category, equipment.quantity)})
+                                  </span>
+                                </div>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      )}
                       
                       {/* Message */}
                       {submission.message && (

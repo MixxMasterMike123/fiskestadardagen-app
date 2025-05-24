@@ -10,6 +10,12 @@ export interface Submission {
   };
   message: string;
   images: string[];
+  equipment?: Array<{
+    category: 'hooks' | 'lures' | 'lines' | 'nets' | 'weights' | 'other';
+    quantity: 'few' | 'many' | 'lots' | 'huge_haul' | '1-5m' | '5-10m' | '10-20m' | '20m+' | '1' | '2' | '3' | '4' | 'more';
+    description?: string;
+    adminAdjustedCount?: number;
+  }>;
   status: 'pending' | 'approved' | 'rejected';
   createdAt: Date;
   approvedAt?: Date;

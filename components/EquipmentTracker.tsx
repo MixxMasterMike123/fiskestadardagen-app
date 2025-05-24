@@ -1,0 +1,274 @@
+'use client'
+
+import { useState } from 'react'
+import { Plus, X } from 'lucide-react'
+
+interface EquipmentData {
+  category: 'hooks' | 'lures' | 'lines' | 'nets' | 'weights' | 'other'
+  quantity: 'few' | 'many' | 'lots' | 'huge_haul' | '1-5m' | '5-10m' | '10-20m' | '20m+' | '1' | '2' | '3' | '4' | 'more'
+  description?: string
+}
+
+interface Props {
+  onEquipmentChange: (equipment: EquipmentData[]) => void
+}
+
+export default function EquipmentTracker({ onEquipmentChange }: Props) {
+  const [equipmentList, setEquipmentList] = useState<EquipmentData[]>([])
+  const [currentEquipment, setCurrentEquipment] = useState<Partial<EquipmentData>>({})
+  const [showAddForm, setShowAddForm] = useState(false)
+
+  const categories = [
+    { value: 'hooks', label: 'Krokar', emoji: '🪝', description: 'Fiskkrokar av olika storlekar' },
+    { value: 'lures', label: 'Beten/Drag', emoji: '🎣', description: 'Spinnare, jigg, wobblers' },
+    { value: 'lines', label: 'Fiskelina', emoji: '🧵', description: 'Nylonlina, flätlina' },
+    { value: 'nets', label: 'Nät', emoji: '🕸️', description: 'Fisknät, kastmaskinnät' },
+    { value: 'weights', label: 'Vikter/Lod', emoji: '⚖️', description: 'Bly, tungsten' },
+    { value: 'other', label: 'Övrigt', emoji: '🔧', description: 'Annan fiskeutrustning' }
+  ] as const
+
+  const quantities = [
+    { value: 'few', label: 'Några få (1-10)', description: 'Mindre mängd' },
+    { value: 'many', label: 'Flera (10-50)', description: 'Medelstör mängd' },
+    { value: 'lots', label: 'Många (50+)', description: 'Stor mängd' },
+    { value: 'huge_haul', label: 'Extremt mycket (100+)', description: 'Mycket stor mängd' }
+  ] as const
+
+  const lineQuantities = [
+    { value: '1-5m', label: '1-5 meter', description: 'Kort längd' },
+    { value: '5-10m', label: '5-10 meter', description: 'Medellängd' },
+    { value: '10-20m', label: '10-20 meter', description: 'Lång längd' },
+    { value: '20m+', label: '20+ meter', description: 'Mycket lång längd' }
+  ] as const
+
+  const netQuantities = [
+    { value: '1', label: '1 nät', description: 'Ett nät' },
+    { value: '2', label: '2 nät', description: 'Två nät' },
+    { value: '3', label: '3 nät', description: 'Tre nät' },
+    { value: '4', label: '4 nät', description: 'Fyra nät' },
+    { value: 'more', label: '5+ nät', description: 'Fem eller fler nät' }
+  ] as const
+
+  const addEquipment = () => {
+    if (currentEquipment.category && currentEquipment.quantity) {
+      const newEquipment = currentEquipment as EquipmentData
+      const updatedList = [...equipmentList, newEquipment]
+      setEquipmentList(updatedList)
+      onEquipmentChange(updatedList)
+      setCurrentEquipment({})
+      setShowAddForm(false)
+    }
+  }
+
+  const removeEquipment = (index: number) => {
+    const updatedList = equipmentList.filter((_, i) => i !== index)
+    setEquipmentList(updatedList)
+    onEquipmentChange(updatedList)
+  }
+
+  const clearAll = () => {
+    setEquipmentList([])
+    setCurrentEquipment({})
+    setShowAddForm(false)
+    onEquipmentChange([])
+  }
+
+  const getCategoryInfo = (category: string) => {
+    return categories.find(c => c.value === category)
+  }
+
+  const getQuantityOptions = () => {
+    if (currentEquipment.category === 'lines') {
+      return lineQuantities
+    }
+    if (currentEquipment.category === 'nets') {
+      return netQuantities
+    }
+    return quantities
+  }
+
+  const getQuantityLabel = (category: string, quantity: string) => {
+    if (category === 'lines') {
+      return lineQuantities.find(q => q.value === quantity)?.label || quantity
+    }
+    if (category === 'nets') {
+      return netQuantities.find(q => q.value === quantity)?.label || quantity
+    }
+    return quantities.find(q => q.value === quantity)?.label || quantity
+  }
+
+  return (
+    <div className="space-y-4">
+      <div className="flex items-center justify-between">
+        <h3 className="text-lg font-medium text-gray-900">
+          Typ av utrustning (valfritt)
+        </h3>
+        {equipmentList.length > 0 && (
+          <button
+            type="button"
+            onClick={clearAll}
+            className="text-sm text-gray-500 hover:text-gray-700 underline"
+          >
+            Rensa alla
+          </button>
+        )}
+      </div>
+      
+      <p className="text-sm text-gray-600">
+        Hjälp oss få bättre statistik över vad som återvinns från våra vatten
+      </p>
+
+      {/* Current Equipment List */}
+      {equipmentList.length > 0 && (
+        <div className="space-y-2">
+          <h4 className="font-medium text-gray-700">Tillagd utrustning:</h4>
+          {equipmentList.map((equipment, index) => (
+            <div key={index} className="flex items-center justify-between bg-green-50 border border-green-200 rounded-lg p-3">
+              <div className="flex items-center space-x-2">
+                <span className="text-lg">
+                  {getCategoryInfo(equipment.category)?.emoji}
+                </span>
+                <div className="text-sm">
+                  <span className="font-medium text-green-800">
+                    {getCategoryInfo(equipment.category)?.label}
+                  </span>
+                  <span className="text-green-600 ml-2">
+                    - {getQuantityLabel(equipment.category, equipment.quantity)}
+                  </span>
+                  {equipment.description && (
+                    <div className="text-green-700 text-xs mt-1">{equipment.description}</div>
+                  )}
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => removeEquipment(index)}
+                className="text-red-500 hover:text-red-700 p-1"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* Add Equipment Button */}
+      {!showAddForm && (
+        <button
+          type="button"
+          onClick={() => setShowAddForm(true)}
+          className="flex items-center space-x-2 text-accent hover:text-orange-600 font-medium"
+        >
+          <Plus className="w-5 h-5" />
+          <span>Lägg till utrustning</span>
+        </button>
+      )}
+
+      {/* Add Equipment Form */}
+      {showAddForm && (
+        <div className="border border-gray-200 rounded-lg p-4 bg-gray-50">
+          <h4 className="font-medium text-gray-900 mb-3">Lägg till utrustning</h4>
+          
+          {/* Category Selection */}
+          <div className="mb-4">
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Typ av utrustning *
+            </label>
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+              {categories.map((category) => (
+                <button
+                  key={category.value}
+                  type="button"
+                  onClick={() => setCurrentEquipment({...currentEquipment, category: category.value})}
+                  className={`p-2 rounded-lg border text-left transition-colors ${
+                    currentEquipment.category === category.value
+                      ? 'border-accent bg-orange-50 text-accent'
+                      : 'border-gray-200 hover:border-gray-300'
+                  }`}
+                >
+                  <div className="flex items-center space-x-2">
+                    <span className="text-lg">{category.emoji}</span>
+                    <div>
+                      <div className="font-medium text-xs">{category.label}</div>
+                    </div>
+                  </div>
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Quantity Selection */}
+          {currentEquipment.category && (
+            <div className="mb-4">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                {currentEquipment.category === 'lines' && 'Längd *'}
+                {currentEquipment.category === 'nets' && 'Antal nät *'}
+                {currentEquipment.category !== 'lines' && currentEquipment.category !== 'nets' && 'Ungefärlig mängd *'}
+              </label>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                {getQuantityOptions().map((quantity) => (
+                  <button
+                    key={quantity.value}
+                    type="button"
+                    onClick={() => setCurrentEquipment({...currentEquipment, quantity: quantity.value})}
+                    className={`p-2 rounded-lg border text-left transition-colors ${
+                      currentEquipment.quantity === quantity.value
+                        ? 'border-accent bg-orange-50 text-accent'
+                        : 'border-gray-200 hover:border-gray-300'
+                    }`}
+                  >
+                    <div className="font-medium text-sm">{quantity.label}</div>
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Description */}
+          {currentEquipment.category && (
+            <div className="mb-4">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Ytterligare detaljer (valfritt)
+              </label>
+              <textarea
+                value={currentEquipment.description || ''}
+                onChange={(e) => setCurrentEquipment({...currentEquipment, description: e.target.value})}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm"
+                rows={2}
+                placeholder={
+                  currentEquipment.category === 'lines' 
+                    ? 'T.ex. typ av lina (nylon, flätlina), tjocklek...'
+                    : currentEquipment.category === 'nets'
+                    ? 'T.ex. typ av nät, storlek, maskstorlek...'
+                    : 'T.ex. storlek på krokar, typ av beten, längd på lina...'
+                }
+              />
+            </div>
+          )}
+
+          {/* Form Actions */}
+          <div className="flex space-x-2">
+            <button
+              type="button"
+              onClick={addEquipment}
+              disabled={!currentEquipment.category || !currentEquipment.quantity}
+              className="bg-accent text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-orange-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              Lägg till
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                setCurrentEquipment({})
+                setShowAddForm(false)
+              }}
+              className="bg-gray-500 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-gray-600 transition-colors"
+            >
+              Avbryt
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
+  )
+} 

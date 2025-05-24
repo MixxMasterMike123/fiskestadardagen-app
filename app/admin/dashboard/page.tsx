@@ -18,6 +18,40 @@ export default function AdminDashboard() {
   const [selectedTab, setSelectedTab] = useState<'pending' | 'approved' | 'all' | 'map'>('pending')
   const router = useRouter()
 
+  const getQuantityLabel = (category: string, quantity: string) => {
+    // Lines - show in meters
+    if (category === 'lines') {
+      switch (quantity) {
+        case '1-5m': return '1-5 meter'
+        case '5-10m': return '5-10 meter'
+        case '10-20m': return '10-20 meter'
+        case '20m+': return '20+ meter'
+        default: return quantity
+      }
+    }
+    
+    // Nets - show specific counts
+    if (category === 'nets') {
+      switch (quantity) {
+        case '1': return '1 nät'
+        case '2': return '2 nät'
+        case '3': return '3 nät'
+        case '4': return '4 nät'
+        case 'more': return '5+ nät'
+        default: return quantity
+      }
+    }
+    
+    // Other equipment - show ranges
+    switch (quantity) {
+      case 'few': return 'Några få (1-10)'
+      case 'many': return 'Flera (10-50)'
+      case 'lots': return 'Många (50+)'
+      case 'huge_haul': return 'Extremt mycket (100+)'
+      default: return quantity
+    }
+  }
+
   useEffect(() => {
     if (!isAuthenticated()) {
       router.push('/admin')
@@ -269,6 +303,53 @@ export default function AdminDashboard() {
                             <span className="text-sm">{submission.location}</span>
                           </div>
                         </div>
+
+                        {/* Equipment Info */}
+                        {submission.equipment && submission.equipment.length > 0 && (
+                          <div className="mb-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+                            <h4 className="font-medium text-blue-900 mb-2 flex items-center">
+                              🎣 Utrustningsinformation
+                            </h4>
+                            <div className="space-y-2">
+                              {submission.equipment.map((equipment, index) => (
+                                <div key={index} className="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm">
+                                  <div>
+                                    <span className="font-medium text-blue-800">Typ:</span>
+                                    <span className="ml-2 text-blue-700">
+                                      {equipment.category === 'hooks' && '🪝 Krokar'}
+                                      {equipment.category === 'lures' && '🎣 Beten/Drag'}
+                                      {equipment.category === 'lines' && '🧵 Fiskelina'}
+                                      {equipment.category === 'nets' && '🕸️ Nät'}
+                                      {equipment.category === 'weights' && '⚖️ Vikter/Lod'}
+                                      {equipment.category === 'other' && '🔧 Övrigt'}
+                                    </span>
+                                  </div>
+                                  <div>
+                                    <span className="font-medium text-blue-800">Mängd:</span>
+                                    <span className="ml-2 text-blue-700">
+                                      {getQuantityLabel(equipment.category, equipment.quantity)}
+                                    </span>
+                                  </div>
+                                  {equipment.description && (
+                                    <div className="md:col-span-2 mt-1">
+                                      <span className="font-medium text-blue-800">Detaljer:</span>
+                                      <span className="ml-2 text-blue-700">{equipment.description}</span>
+                                    </div>
+                                  )}
+                                  {equipment.adminAdjustedCount && (
+                                    <div className="md:col-span-2 mt-1">
+                                      <span className="font-medium text-blue-800">Admin-justerat antal:</span>
+                                      <span className="ml-2 text-blue-700">{equipment.adminAdjustedCount}</span>
+                                    </div>
+                                  )}
+                                  {index < (submission.equipment?.length || 0) - 1 && (
+                                    <div className="md:col-span-2 border-b border-blue-200 my-2"></div>
+                                  )}
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        )}
 
                         {/* Message */}
                         {submission.message && (

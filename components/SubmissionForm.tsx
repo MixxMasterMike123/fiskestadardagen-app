@@ -6,6 +6,7 @@ import { toast } from 'react-hot-toast'
 import { Upload, X, Camera } from 'lucide-react'
 import { submitReport } from '@/lib/submissions'
 import LocationPicker from './LocationPicker'
+import EquipmentTracker from './EquipmentTracker'
 
 interface FormData {
   name: string
@@ -15,10 +16,17 @@ interface FormData {
   message: string
 }
 
+interface EquipmentData {
+  category: 'hooks' | 'lures' | 'lines' | 'nets' | 'weights' | 'other'
+  quantity: 'few' | 'many' | 'lots' | 'huge_haul' | '1-5m' | '5-10m' | '10-20m' | '20m+' | '1' | '2' | '3' | '4' | 'more'
+  description?: string
+}
+
 export default function SubmissionForm() {
   const [selectedImages, setSelectedImages] = useState<File[]>([])
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [locationData, setLocationData] = useState<{address: string, lat: number, lng: number} | null>(null)
+  const [equipmentData, setEquipmentData] = useState<EquipmentData[]>([])
   const { register, handleSubmit, reset, setValue, formState: { errors } } = useForm<FormData>()
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -47,12 +55,14 @@ export default function SubmissionForm() {
     try {
       await submitReport({
         ...data,
-        location: locationData.address
+        location: locationData.address,
+        equipment: equipmentData.length > 0 ? equipmentData : undefined
       }, selectedImages, locationData)
       toast.success('Tack för din rapport! Den kommer att granskas innan publicering.')
       reset()
       setSelectedImages([])
       setLocationData(null)
+      setEquipmentData([])
     } catch (error) {
       toast.error('Något gick fel. Försök igen.')
     } finally {
@@ -136,6 +146,11 @@ export default function SubmissionForm() {
               Plats *
             </label>
             <LocationPicker onLocationSelect={handleLocationSelect} />
+          </div>
+
+          {/* Equipment Tracker */}
+          <div className="border-t border-gray-200 pt-6">
+            <EquipmentTracker onEquipmentChange={setEquipmentData} />
           </div>
 
           {/* Message */}
