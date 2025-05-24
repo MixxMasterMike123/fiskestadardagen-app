@@ -40,7 +40,13 @@ export function calculateImpactStats(submissions: Submission[]): ImpactStats {
   approvedSubmissions.forEach(submission => {
     if (submission.equipment && submission.equipment.length > 0) {
       submission.equipment.forEach(equipment => {
-        const category = equipment.category
+        let category = equipment.category
+        
+        // Handle legacy nets data - convert to 'other' category
+        if ((category as any) === 'nets' || !categoryStats[category]) {
+          category = 'other'
+        }
+        
         categoryStats[category].count++
         totalEquipmentItems++
         
@@ -69,8 +75,9 @@ export function calculateImpactStats(submissions: Submission[]): ImpactStats {
           }
           categoryStats[category].ranges.push(equipment.quantity)
         } else {
-          // Other equipment - estimated ranges
-          switch (equipment.quantity) {
+          // Other equipment - estimated ranges (including converted nets)
+          const quantity = equipment.quantity as any // Allow legacy quantity values
+          switch (quantity) {
             case 'few':
               estimatedCount = 5 // Average of 1-10
               break
@@ -83,8 +90,27 @@ export function calculateImpactStats(submissions: Submission[]): ImpactStats {
             case 'huge_haul':
               estimatedCount = 150 // Conservative estimate for 100+
               break
+            // Handle legacy nets quantities
+            case '1':
+              estimatedCount = 1
+              break
+            case '2':
+              estimatedCount = 2
+              break
+            case '3':
+              estimatedCount = 3
+              break
+            case '4':
+              estimatedCount = 4
+              break
+            case 'more':
+              estimatedCount = 6 // Conservative estimate for 5+
+              break
+            default:
+              estimatedCount = 5 // Fallback for any unknown quantities
+              break
           }
-          categoryStats[category].ranges.push(equipment.quantity)
+          categoryStats[category].ranges.push(quantity)
         }
         
         // Use admin-adjusted count if available
