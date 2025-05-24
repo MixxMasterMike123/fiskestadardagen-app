@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import Header from '@/components/Header'
 import GalleryMap from '@/components/GalleryMap'
 import SocialShare from '@/components/SocialShare'
+import StatisticsShare from '@/components/StatisticsShare'
 import ImageLightbox from '@/components/ImageLightbox'
 import { getSubmissions } from '@/lib/submissions'
 import { Submission } from '@/types'
@@ -101,7 +102,10 @@ export default function GalleryPage() {
                     <TrendingUp className="h-4 w-4 md:h-6 md:w-6" />
                     <h2 className="text-lg md:text-xl font-bold">Total miljöpåverkan</h2>
                   </div>
-                  <div className="text-lg md:text-2xl">🌊</div>
+                  <div className="flex items-center space-x-2">
+                    <StatisticsShare stats={stats} />
+                    <div className="text-lg md:text-2xl">🌊</div>
+                  </div>
                 </div>
                 
                 <div className="grid grid-cols-3 gap-2 md:gap-4">
@@ -266,7 +270,10 @@ export default function GalleryPage() {
                             <TrendingUp className="h-5 w-5 lg:h-6 lg:w-6" />
                             <h2 className="text-lg lg:text-xl font-bold">Total miljöpåverkan</h2>
                           </div>
-                          <div className="text-xl lg:text-2xl">🌊</div>
+                          <div className="flex items-center space-x-2">
+                            <StatisticsShare stats={stats} />
+                            <div className="text-xl lg:text-2xl">🌊</div>
+                          </div>
                         </div>
                         
                         <div className="grid grid-cols-1 gap-3 lg:gap-4">

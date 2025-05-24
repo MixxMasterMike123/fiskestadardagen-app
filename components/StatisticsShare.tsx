@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { Share2, Facebook, Twitter, MessageCircle, Copy, Check, Info } from 'lucide-react'
 import { toast } from 'react-hot-toast'
 import { ImpactStats, formatNumber } from '@/lib/statistics'
@@ -13,10 +13,28 @@ export default function StatisticsShare({ stats }: StatisticsShareProps) {
   const [isOpen, setIsOpen] = useState(false)
   const [copied, setCopied] = useState(false)
   const [canShare, setCanShare] = useState(false)
+  const [popupPosition, setPopupPosition] = useState<'top' | 'bottom'>('top')
+  const buttonRef = useRef<HTMLButtonElement>(null)
 
   useEffect(() => {
     setCanShare(typeof navigator !== 'undefined' && 'share' in navigator)
   }, [])
+
+  // Calculate popup position based on button position
+  useEffect(() => {
+    if (isOpen && buttonRef.current) {
+      const buttonRect = buttonRef.current.getBoundingClientRect()
+      const spaceAbove = buttonRect.top
+      const spaceBelow = window.innerHeight - buttonRect.bottom
+      
+      // If there's more space below or insufficient space above, show popup below
+      if (spaceBelow > spaceAbove || spaceAbove < 400) {
+        setPopupPosition('bottom')
+      } else {
+        setPopupPosition('top')
+      }
+    }
+  }, [isOpen])
 
   // Create sharing content with statistics
   const shareText = `🌊 Fantastiska resultat från Fiskestädardagen!
@@ -109,6 +127,7 @@ Tillsammans håller vi våra svenska vatten rena! Varje bortplockat nät och kro
   return (
     <div className="relative">
       <button
+        ref={buttonRef}
         onClick={() => setIsOpen(!isOpen)}
         className="p-2 bg-white/10 hover:bg-white/20 rounded-full transition-colors"
         title="Dela statistik"
@@ -124,8 +143,12 @@ Tillsammans håller vi våra svenska vatten rena! Varje bortplockat nät och kro
             onClick={() => setIsOpen(false)}
           />
           
-          {/* Share Menu */}
-          <div className="absolute right-0 bottom-full mb-2 z-50 bg-white rounded-lg shadow-lg border border-gray-200 p-4 w-80">
+          {/* Share Menu with Dynamic Positioning */}
+          <div className={`absolute right-0 z-50 bg-white rounded-lg shadow-lg border border-gray-200 p-4 w-80 ${
+            popupPosition === 'top' 
+              ? 'bottom-full mb-2' 
+              : 'top-full mt-2'
+          }`}>
             <h4 className="font-medium text-gray-900 mb-3">Dela miljöpåverkan</h4>
             
             {/* Statistics Summary */}
