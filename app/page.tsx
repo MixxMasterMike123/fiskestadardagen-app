@@ -49,15 +49,7 @@ export default function HomePage() {
           {/* Compact Mobile Impact Stats */}
           {!loading && stats.totalSubmissions > 0 && (
             <div className="block md:hidden">
-              <div className={`rounded-lg p-4 text-white ${
-                stats.totalSubmissions >= 10 
-                  ? 'bg-gradient-to-r from-blue-600 to-cyan-500' 
-                  : stats.totalSubmissions >= 5
-                  ? 'bg-gradient-to-r from-blue-500 to-teal-500'
-                  : stats.totalSubmissions >= 2
-                  ? 'bg-gradient-to-r from-teal-500 to-blue-500'
-                  : 'bg-gradient-to-r from-green-500 to-blue-600'
-              }`}>
+              <div className="bg-gradient-to-r from-green-500 to-blue-600 rounded-lg p-4 text-white">
                 <div className="flex items-center justify-between mb-3">
                   <div className="flex items-center space-x-2">
                     <TrendingUp className="h-4 w-4" />
@@ -74,21 +66,21 @@ export default function HomePage() {
                 <div className="grid grid-cols-3 gap-3 text-center">
                   <div>
                     <div className="text-lg font-bold">{stats.totalSubmissions}</div>
-                    <div className="text-xs text-white/80">rapporter</div>
+                    <div className="text-xs text-green-100">rapporter</div>
                   </div>
                   <div>
                     <div className="text-lg font-bold">{formatNumber(stats.estimatedTotalPieces)}</div>
-                    <div className="text-xs text-white/80">delar</div>
+                    <div className="text-xs text-green-100">delar</div>
                   </div>
                   <div>
                     <div className="text-lg font-bold">{Math.round(stats.lineMeters + stats.netCount)}</div>
-                    <div className="text-xs text-white/80">m+nät</div>
+                    <div className="text-xs text-green-100">m+nät</div>
                   </div>
                 </div>
                 
                 {showFullStats && (
                   <div className="mt-4 pt-3 border-t border-white/20">
-                    <div className="text-xs text-white/90">
+                    <div className="text-xs text-green-100">
                       🎯 Tillsammans gör vi skillnad för miljön!
                     </div>
                   </div>
