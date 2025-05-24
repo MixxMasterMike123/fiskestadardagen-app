@@ -78,14 +78,14 @@ export default function SubmissionForm() {
   return (
     <div className="max-w-2xl mx-auto">
       <div className="card">
-        <h2 className="text-2xl font-bold text-gray-900 mb-6">
+        <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-4 md:mb-6">
           Rapportera återvunnen utrustning
         </h2>
-        <p className="text-gray-600 mb-8">
+        <p className="text-sm md:text-base text-gray-600 mb-6 md:mb-8">
           Hjälp oss hålla våra vatten rena! Ladda upp ett foto av fiskeutrustning som du har hämtat från sjöar eller vattendrag.
         </p>
 
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 md:space-y-6">
           {/* Name */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -94,11 +94,11 @@ export default function SubmissionForm() {
             <input
               {...register('name', { required: 'Du måste ange ditt namn' })}
               type="text"
-              className="input-field"
+              className="input-field text-sm md:text-base"
               placeholder="Förnamn Efternamn"
             />
             {errors.name && (
-              <p className="text-red-500 text-sm mt-1">{errors.name.message}</p>
+              <p className="text-red-500 text-xs md:text-sm mt-1">{errors.name.message}</p>
             )}
           </div>
 
@@ -116,11 +116,11 @@ export default function SubmissionForm() {
                 }
               })}
               type="email"
-              className="input-field"
+              className="input-field text-sm md:text-base"
               placeholder="din@email.se"
             />
             {errors.email && (
-              <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>
+              <p className="text-red-500 text-xs md:text-sm mt-1">{errors.email.message}</p>
             )}
           </div>
 
@@ -132,11 +132,11 @@ export default function SubmissionForm() {
             <input
               {...register('phone', { required: 'Du måste ange ditt telefonnummer' })}
               type="tel"
-              className="input-field"
+              className="input-field text-sm md:text-base"
               placeholder="070-123 45 67"
             />
             {errors.phone && (
-              <p className="text-red-500 text-sm mt-1">{errors.phone.message}</p>
+              <p className="text-red-500 text-xs md:text-sm mt-1">{errors.phone.message}</p>
             )}
           </div>
 
@@ -149,7 +149,7 @@ export default function SubmissionForm() {
           </div>
 
           {/* Equipment Tracker */}
-          <div className="border-t border-gray-200 pt-6">
+          <div className="border-t border-gray-200 pt-4 md:pt-6">
             <EquipmentTracker onEquipmentChange={setEquipmentData} />
           </div>
 
@@ -160,8 +160,8 @@ export default function SubmissionForm() {
             </label>
             <textarea
               {...register('message')}
-              className="input-field"
-              rows={4}
+              className="input-field text-sm md:text-base"
+              rows={3}
               placeholder="Berätta kort om vad du hittade och omständigheterna..."
             />
           </div>
@@ -171,7 +171,7 @@ export default function SubmissionForm() {
             <label className="block text-sm font-medium text-gray-700 mb-2">
               Foto av återvunnen utrustning *
             </label>
-            <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
+            <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 md:p-6 text-center">
               <input
                 type="file"
                 multiple
@@ -181,7 +181,7 @@ export default function SubmissionForm() {
                 id="image-upload"
               />
               <label htmlFor="image-upload" className="cursor-pointer">
-                <Camera className="mx-auto h-12 w-12 text-gray-400" />
+                <Camera className="mx-auto h-8 w-8 md:h-12 md:w-12 text-gray-400" />
                 <p className="mt-2 text-sm text-gray-600">
                   Klicka för att ladda upp bilder
                 </p>
@@ -191,22 +191,22 @@ export default function SubmissionForm() {
               </label>
             </div>
             
-            {/* Image Preview */}
+            {/* Image Preview - Mobile Optimized */}
             {selectedImages.length > 0 && (
-              <div className="mt-4 grid grid-cols-2 sm:grid-cols-3 gap-4">
+              <div className="mt-3 md:mt-4 grid grid-cols-3 sm:grid-cols-4 gap-2 md:gap-4">
                 {selectedImages.map((file, index) => (
                   <div key={index} className="relative">
                     <img
                       src={URL.createObjectURL(file)}
                       alt={`Preview ${index + 1}`}
-                      className="w-full h-24 object-cover rounded-lg"
+                      className="w-full h-16 md:h-24 object-cover rounded-lg"
                     />
                     <button
                       type="button"
                       onClick={() => removeImage(index)}
-                      className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center"
+                      className="absolute -top-1 -right-1 bg-red-500 text-white rounded-full w-5 h-5 md:w-6 md:h-6 flex items-center justify-center"
                     >
-                      <X size={14} />
+                      <X size={12} className="md:w-3.5 md:h-3.5" />
                     </button>
                   </div>
                 ))}
@@ -214,28 +214,26 @@ export default function SubmissionForm() {
             )}
           </div>
 
-          {/* Required Fields Notice */}
-          <div className="bg-orange-50 border border-orange-200 rounded-lg p-4">
-            <p className="text-sm text-orange-800">
-              <strong>Obligatoriska fält:</strong>
+          {/* Required Fields Notice - Mobile Compact */}
+          <div className="bg-orange-50 border border-orange-200 rounded-lg p-3 md:p-4">
+            <p className="text-xs md:text-sm text-orange-800">
+              <strong>Obligatoriska fält:</strong> Du måste välja en bild och ange en plats
             </p>
-            <ul className="text-sm text-orange-700 mt-1 space-y-1">
-              <li>• Du måste välja en bild</li>
-              <li>• Du måste ange en plats</li>
-            </ul>
           </div>
 
-          {/* Submit Button */}
-          <button
-            type="submit"
-            disabled={isSubmitting}
-            className="w-full btn-primary disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            {isSubmitting ? 'Skickar...' : 'Skicka in rapport'}
-          </button>
+          {/* Submit Button - Mobile Sticky */}
+          <div className="sticky bottom-0 bg-white p-3 md:p-0 border-t md:border-0 -mx-4 md:mx-0 md:static md:bg-transparent">
+            <button
+              type="submit"
+              disabled={isSubmitting}
+              className="w-full btn-primary text-sm md:text-base py-3 md:py-2 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {isSubmitting ? 'Skickar...' : 'Skicka in rapport'}
+            </button>
+          </div>
 
           {/* Privacy Notice */}
-          <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
+          <div className="bg-gray-50 border border-gray-200 rounded-lg p-3 md:p-4 mb-4 md:mb-0">
             <p className="text-xs text-gray-600">
               Fyll i alla obligatoriska fält (*) för att kunna skicka rapporten
             </p>

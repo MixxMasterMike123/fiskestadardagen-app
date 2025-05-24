@@ -73,10 +73,6 @@ export default function EquipmentTracker({ onEquipmentChange }: Props) {
     onEquipmentChange([])
   }
 
-  const getCategoryInfo = (category: string) => {
-    return categories.find(c => c.value === category)
-  }
-
   const getQuantityOptions = () => {
     if (currentEquipment.category === 'lines') {
       return lineQuantities
@@ -97,43 +93,47 @@ export default function EquipmentTracker({ onEquipmentChange }: Props) {
     return quantities.find(q => q.value === quantity)?.label || quantity
   }
 
+  const getCategoryInfo = (category: string) => {
+    return categories.find(c => c.value === category)
+  }
+
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
-        <h3 className="text-lg font-medium text-gray-900">
+        <h3 className="text-base md:text-lg font-medium text-gray-900">
           Typ av utrustning (valfritt)
         </h3>
         {equipmentList.length > 0 && (
           <button
             type="button"
             onClick={clearAll}
-            className="text-sm text-gray-500 hover:text-gray-700 underline"
+            className="text-xs md:text-sm text-gray-500 hover:text-gray-700 underline"
           >
             Rensa alla
           </button>
         )}
       </div>
       
-      <p className="text-sm text-gray-600">
+      <p className="text-xs md:text-sm text-gray-600">
         Hjälp oss få bättre statistik över vad som återvinns från våra vatten
       </p>
 
       {/* Current Equipment List */}
       {equipmentList.length > 0 && (
         <div className="space-y-2">
-          <h4 className="font-medium text-gray-700">Tillagd utrustning:</h4>
+          <h4 className="font-medium text-gray-700 text-sm">Tillagd utrustning:</h4>
           {equipmentList.map((equipment, index) => (
-            <div key={index} className="flex items-center justify-between bg-green-50 border border-green-200 rounded-lg p-3">
+            <div key={index} className="flex items-center justify-between bg-green-50 border border-green-200 rounded-lg p-2 md:p-3">
               <div className="flex items-center space-x-2">
-                <span className="text-lg">
+                <span className="text-base md:text-lg">
                   {getCategoryInfo(equipment.category)?.emoji}
                 </span>
-                <div className="text-sm">
+                <div className="text-xs md:text-sm">
                   <span className="font-medium text-green-800">
                     {getCategoryInfo(equipment.category)?.label}
                   </span>
-                  <span className="text-green-600 ml-2">
-                    - {getQuantityLabel(equipment.category, equipment.quantity)}
+                  <span className="text-green-600 ml-1 md:ml-2 block md:inline">
+                    {getQuantityLabel(equipment.category, equipment.quantity)}
                   </span>
                   {equipment.description && (
                     <div className="text-green-700 text-xs mt-1">{equipment.description}</div>
@@ -143,9 +143,9 @@ export default function EquipmentTracker({ onEquipmentChange }: Props) {
               <button
                 type="button"
                 onClick={() => removeEquipment(index)}
-                className="text-red-500 hover:text-red-700 p-1"
+                className="text-red-500 hover:text-red-700 p-1 flex-shrink-0"
               >
-                <X className="w-4 h-4" />
+                <X className="w-3 h-3 md:w-4 md:h-4" />
               </button>
             </div>
           ))}
@@ -157,102 +157,100 @@ export default function EquipmentTracker({ onEquipmentChange }: Props) {
         <button
           type="button"
           onClick={() => setShowAddForm(true)}
-          className="flex items-center space-x-2 text-accent hover:text-orange-600 font-medium"
+          className="flex items-center space-x-2 text-accent hover:text-orange-600 font-medium text-sm md:text-base"
         >
-          <Plus className="w-5 h-5" />
+          <Plus className="w-4 h-4 md:w-5 md:h-5" />
           <span>Lägg till utrustning</span>
         </button>
       )}
 
-      {/* Add Equipment Form */}
+      {/* Add Equipment Form - Mobile Optimized */}
       {showAddForm && (
-        <div className="border border-gray-200 rounded-lg p-4 bg-gray-50">
-          <h4 className="font-medium text-gray-900 mb-3">Lägg till utrustning</h4>
+        <div className="border border-gray-200 rounded-lg p-3 md:p-4 bg-gray-50">
+          <h4 className="font-medium text-gray-900 mb-3 text-sm md:text-base">Lägg till utrustning</h4>
           
-          {/* Category Selection */}
-          <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+          {/* Category Selection - Mobile Grid */}
+          <div className="mb-3 md:mb-4">
+            <label className="block text-xs md:text-sm font-medium text-gray-700 mb-2">
               Typ av utrustning *
             </label>
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+            <div className="grid grid-cols-2 gap-2">
               {categories.map((category) => (
                 <button
                   key={category.value}
                   type="button"
                   onClick={() => setCurrentEquipment({...currentEquipment, category: category.value})}
-                  className={`p-2 rounded-lg border text-left transition-colors ${
+                  className={`p-2 md:p-3 rounded-lg border text-left transition-colors ${
                     currentEquipment.category === category.value
                       ? 'border-accent bg-orange-50 text-accent'
                       : 'border-gray-200 hover:border-gray-300'
                   }`}
                 >
-                  <div className="flex items-center space-x-2">
-                    <span className="text-lg">{category.emoji}</span>
-                    <div>
-                      <div className="font-medium text-xs">{category.label}</div>
-                    </div>
+                  <div className="flex items-center space-x-1 md:space-x-2">
+                    <span className="text-sm md:text-lg">{category.emoji}</span>
+                    <div className="text-xs md:text-sm font-medium">{category.label}</div>
                   </div>
                 </button>
               ))}
             </div>
           </div>
 
-          {/* Quantity Selection */}
+          {/* Quantity Selection - Mobile Optimized */}
           {currentEquipment.category && (
-            <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+            <div className="mb-3 md:mb-4">
+              <label className="block text-xs md:text-sm font-medium text-gray-700 mb-2">
                 {currentEquipment.category === 'lines' && 'Längd *'}
                 {currentEquipment.category === 'nets' && 'Antal nät *'}
                 {currentEquipment.category !== 'lines' && currentEquipment.category !== 'nets' && 'Ungefärlig mängd *'}
               </label>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+              <div className="grid grid-cols-1 gap-2">
                 {getQuantityOptions().map((quantity) => (
                   <button
                     key={quantity.value}
                     type="button"
                     onClick={() => setCurrentEquipment({...currentEquipment, quantity: quantity.value})}
-                    className={`p-2 rounded-lg border text-left transition-colors ${
+                    className={`p-2 md:p-3 rounded-lg border text-left transition-colors ${
                       currentEquipment.quantity === quantity.value
                         ? 'border-accent bg-orange-50 text-accent'
                         : 'border-gray-200 hover:border-gray-300'
                     }`}
                   >
-                    <div className="font-medium text-sm">{quantity.label}</div>
+                    <div className="text-xs md:text-sm font-medium">{quantity.label}</div>
                   </button>
                 ))}
               </div>
             </div>
           )}
 
-          {/* Description */}
+          {/* Description - Compact */}
           {currentEquipment.category && (
-            <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+            <div className="mb-3 md:mb-4">
+              <label className="block text-xs md:text-sm font-medium text-gray-700 mb-2">
                 Ytterligare detaljer (valfritt)
               </label>
               <textarea
                 value={currentEquipment.description || ''}
                 onChange={(e) => setCurrentEquipment({...currentEquipment, description: e.target.value})}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm"
+                className="w-full px-2 md:px-3 py-2 border border-gray-300 rounded-md text-xs md:text-sm"
                 rows={2}
                 placeholder={
                   currentEquipment.category === 'lines' 
                     ? 'T.ex. typ av lina (nylon, flätlina), tjocklek...'
                     : currentEquipment.category === 'nets'
                     ? 'T.ex. typ av nät, storlek, maskstorlek...'
-                    : 'T.ex. storlek på krokar, typ av beten, längd på lina...'
+                    : 'T.ex. storlek på krokar, typ av beten...'
                 }
               />
             </div>
           )}
 
-          {/* Form Actions */}
-          <div className="flex space-x-2">
+          {/* Form Actions - Always Visible */}
+          <div className="flex space-x-2 bg-white p-2 rounded border-t sticky bottom-0 md:static md:bg-transparent md:border-0 md:p-0">
             <button
               type="button"
               onClick={addEquipment}
               disabled={!currentEquipment.category || !currentEquipment.quantity}
-              className="bg-accent text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-orange-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="flex-1 bg-accent text-white px-3 md:px-4 py-2 rounded-md text-sm font-medium hover:bg-orange-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
               Lägg till
             </button>
@@ -262,7 +260,7 @@ export default function EquipmentTracker({ onEquipmentChange }: Props) {
                 setCurrentEquipment({})
                 setShowAddForm(false)
               }}
-              className="bg-gray-500 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-gray-600 transition-colors"
+              className="bg-gray-500 text-white px-3 md:px-4 py-2 rounded-md text-sm font-medium hover:bg-gray-600 transition-colors"
             >
               Avbryt
             </button>
