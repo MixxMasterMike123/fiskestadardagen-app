@@ -24,7 +24,8 @@ export default function Header() {
             </Link>
           </div>
           
-          <nav className="flex space-x-8">
+          {/* Desktop Navigation - Hidden on mobile */}
+          <nav className="hidden md:flex space-x-8">
             <Link 
               href="/" 
               className={`text-sm font-medium transition-colors ${
