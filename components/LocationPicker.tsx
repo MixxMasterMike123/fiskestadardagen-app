@@ -142,11 +142,32 @@ export default function LocationPicker({ onLocationSelect, initialLocation }: Lo
         />
       </div>
 
+      {/* Clear Instructions Above Map */}
+      <div className="bg-orange-50 border border-orange-200 rounded-lg p-4">
+        <p className="text-sm font-semibold text-orange-900 mb-2">
+          📍 Välj plats på 3 olika sätt:
+        </p>
+        <ul className="text-sm text-orange-800 space-y-1">
+          <li><strong>1. Klicka direkt på kartan</strong> där du hittade utrustningen</li>
+          <li><strong>2. Sök</strong> i rutan ovan (t.ex. "Vänern" eller "Göta älv")</li>
+          <li><strong>3. Använd GPS</strong> med knappen under kartan</li>
+        </ul>
+      </div>
+
       {/* Map Container */}
       <div className="relative">
+        {/* Click Instruction Overlay */}
+        {!selectedLocation && isLoaded && (
+          <div className="absolute top-4 left-4 right-4 z-10 bg-white/90 backdrop-blur-sm border border-orange-300 rounded-lg p-3 shadow-lg">
+            <p className="text-sm font-medium text-orange-800 text-center">
+              👆 <strong>Klicka på kartan</strong> för att välja exakt plats
+            </p>
+          </div>
+        )}
+        
         <div
           ref={mapRef}
-          className="w-full h-64 rounded-lg border border-gray-300"
+          className="w-full h-64 rounded-lg border border-gray-300 cursor-crosshair"
           style={{ minHeight: '250px' }}
         />
         
@@ -160,35 +181,32 @@ export default function LocationPicker({ onLocationSelect, initialLocation }: Lo
         )}
       </div>
 
-      {/* Current Location Button */}
+      {/* Current Location Button and Selected Location */}
       <div className="flex items-center justify-between">
         <button
           type="button"
           onClick={getCurrentLocation}
-          className="flex items-center space-x-2 text-sm text-[#ee7e30] hover:text-[#d66b1a] transition-colors"
+          className="flex items-center space-x-2 text-sm text-[#ee7e30] hover:text-[#d66b1a] transition-colors font-medium"
         >
           <MapPin className="h-4 w-4" />
-          <span>Använd min nuvarande position</span>
+          <span>📱 Använd min nuvarande position</span>
         </button>
 
         {selectedLocation && (
-          <div className="text-sm text-gray-600">
-            <strong>Vald plats:</strong> {selectedLocation}
+          <div className="text-sm text-green-700 bg-green-50 px-3 py-1 rounded-lg border border-green-200">
+            <strong>✅ Vald:</strong> {selectedLocation.length > 40 ? selectedLocation.substring(0, 40) + '...' : selectedLocation}
           </div>
         )}
       </div>
 
-      {/* Instructions */}
-      <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
-        <p className="text-sm text-blue-800">
-          <strong>Så här väljer du plats:</strong>
-        </p>
-        <ul className="text-sm text-blue-700 mt-1 space-y-1">
-          <li>• Sök efter platsen i sökrutan ovan</li>
-          <li>• Eller klicka direkt på kartan där du hittade utrustningen</li>
-          <li>• Du kan även använda din nuvarande position</li>
-        </ul>
-      </div>
+      {/* Success Message */}
+      {selectedLocation && (
+        <div className="bg-green-50 border border-green-200 rounded-lg p-3">
+          <p className="text-sm text-green-800">
+            <strong>✅ Perfekt!</strong> Du har valt en plats. Du kan ändra genom att klicka på en annan punkt på kartan.
+          </p>
+        </div>
+      )}
     </div>
   )
 } 
