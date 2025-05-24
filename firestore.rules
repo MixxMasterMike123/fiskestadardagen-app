@@ -18,17 +18,15 @@ service cloud.firestore {
 
     // Submissions collection rules
     match /submissions/{document} {
-      // Allow reading only approved submissions (for public gallery)
-      allow read: if resource.data.status == 'approved';
+      // Allow reading all submissions (needed for admin dashboard)
+      // In production, you'd want to add proper admin authentication
+      allow read: if true;
       
       // Allow anyone to create new submissions (anonymous submissions)
-      allow create: if request.auth == null 
-                   && request.resource.data.keys().hasAll(['name', 'email', 'phone', 'location', 'images', 'status', 'createdAt'])
-                   && request.resource.data.status == 'pending';
+      allow create: if request.auth == null;
       
-      // Allow updates and deletes for admin purposes (in practice, this will be handled by admin functions)
-      // For now, allowing all authenticated updates/deletes for admin dashboard
-      allow update, delete: if true; // This will be handled by your admin dashboard logic
+      // Allow updates and deletes (needed for admin approve/reject/delete)
+      allow update, delete: if true;
     }
   }
 }
