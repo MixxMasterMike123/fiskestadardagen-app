@@ -129,7 +129,7 @@ export default function LocationPicker({ onLocationSelect, initialLocation }: Lo
   }
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-3 md:space-y-4">
       {/* Search Input */}
       <div className="relative">
         <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
@@ -142,33 +142,33 @@ export default function LocationPicker({ onLocationSelect, initialLocation }: Lo
         />
       </div>
 
-      {/* Clear Instructions Above Map */}
-      <div className="bg-orange-50 border border-orange-200 rounded-lg p-4">
-        <p className="text-sm font-semibold text-orange-900 mb-2">
+      {/* Clear Instructions Above Map - Mobile Optimized */}
+      <div className="bg-orange-50 border border-orange-200 rounded-lg p-3 md:p-4">
+        <p className="text-xs md:text-sm font-semibold text-orange-900 mb-1 md:mb-2">
           📍 Välj plats på 3 olika sätt:
         </p>
-        <ul className="text-sm text-orange-800 space-y-1">
+        <ul className="text-xs md:text-sm text-orange-800 space-y-0.5 md:space-y-1">
           <li><strong>1. Klicka direkt på kartan</strong> där du hittade utrustningen</li>
           <li><strong>2. Sök</strong> i rutan ovan (t.ex. "Vänern" eller "Göta älv")</li>
           <li><strong>3. Använd GPS</strong> med knappen under kartan</li>
         </ul>
       </div>
 
-      {/* Map Container */}
+      {/* Click Instruction - Now Above Map */}
+      {!selectedLocation && isLoaded && (
+        <div className="bg-white border border-orange-300 rounded-lg p-2 md:p-3 shadow-sm">
+          <p className="text-xs md:text-sm font-medium text-orange-800 text-center">
+            👆 <strong>Klicka på kartan</strong> för att välja exakt plats
+          </p>
+        </div>
+      )}
+
+      {/* Map Container - Bigger for Mobile */}
       <div className="relative">
-        {/* Click Instruction Overlay */}
-        {!selectedLocation && isLoaded && (
-          <div className="absolute top-4 left-4 right-4 z-10 bg-white/90 backdrop-blur-sm border border-orange-300 rounded-lg p-3 shadow-lg">
-            <p className="text-sm font-medium text-orange-800 text-center">
-              👆 <strong>Klicka på kartan</strong> för att välja exakt plats
-            </p>
-          </div>
-        )}
-        
         <div
           ref={mapRef}
-          className="w-full h-64 rounded-lg border border-gray-300 cursor-crosshair"
-          style={{ minHeight: '250px' }}
+          className="w-full h-80 md:h-64 rounded-lg border border-gray-300 cursor-crosshair"
+          style={{ minHeight: '320px' }}
         />
         
         {!isLoaded && (
@@ -182,27 +182,27 @@ export default function LocationPicker({ onLocationSelect, initialLocation }: Lo
       </div>
 
       {/* Current Location Button and Selected Location */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-2 sm:space-y-0">
         <button
           type="button"
           onClick={getCurrentLocation}
-          className="flex items-center space-x-2 text-sm text-[#ee7e30] hover:text-[#d66b1a] transition-colors font-medium"
+          className="flex items-center space-x-2 text-xs md:text-sm text-[#ee7e30] hover:text-[#d66b1a] transition-colors font-medium"
         >
-          <MapPin className="h-4 w-4" />
+          <MapPin className="h-3 w-3 md:h-4 md:w-4" />
           <span>📱 Använd min nuvarande position</span>
         </button>
 
         {selectedLocation && (
-          <div className="text-sm text-green-700 bg-green-50 px-3 py-1 rounded-lg border border-green-200">
-            <strong>✅ Vald:</strong> {selectedLocation.length > 40 ? selectedLocation.substring(0, 40) + '...' : selectedLocation}
+          <div className="text-xs md:text-sm text-green-700 bg-green-50 px-2 md:px-3 py-1 rounded-lg border border-green-200">
+            <strong>✅ Vald:</strong> {selectedLocation.length > 30 ? selectedLocation.substring(0, 30) + '...' : selectedLocation}
           </div>
         )}
       </div>
 
       {/* Success Message */}
       {selectedLocation && (
-        <div className="bg-green-50 border border-green-200 rounded-lg p-3">
-          <p className="text-sm text-green-800">
+        <div className="bg-green-50 border border-green-200 rounded-lg p-2 md:p-3">
+          <p className="text-xs md:text-sm text-green-800">
             <strong>✅ Perfekt!</strong> Du har valt en plats. Du kan ändra genom att klicka på en annan punkt på kartan.
           </p>
         </div>
