@@ -306,6 +306,44 @@ export default function SubmissionForm() {
           </div>
         </form>
       </div>
+      
+      {/* Loading Overlay */}
+      {isSubmitting && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm">
+          <div className="bg-white rounded-xl p-6 md:p-8 max-w-sm mx-4 text-center shadow-2xl">
+            {/* Spinner */}
+            <div className="flex justify-center mb-4">
+              <div className="animate-spin rounded-full h-12 w-12 border-4 border-accent border-t-transparent"></div>
+            </div>
+            
+            {/* Loading Text */}
+            <h3 className="text-lg font-semibold text-gray-900 mb-2">
+              Skickar din rapport
+            </h3>
+            <p className="text-sm text-gray-600 mb-1">
+              {selectedImages.length > 0 
+                ? `Laddar upp ${selectedImages.length} bild${selectedImages.length > 1 ? 'er' : ''}...`
+                : 'Bearbetar din rapport...'
+              }
+            </p>
+            <p className="text-xs text-gray-500">
+              Detta kan ta några sekunder
+            </p>
+            
+            {/* Progress indicator for multiple images */}
+            {selectedImages.length > 1 && (
+              <div className="mt-3">
+                <div className="w-full bg-gray-200 rounded-full h-2">
+                  <div 
+                    className="bg-accent h-2 rounded-full transition-all duration-300 ease-out"
+                    style={{ width: '100%' }}
+                  ></div>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   )
 } 
