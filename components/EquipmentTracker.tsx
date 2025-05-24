@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { Plus, X } from 'lucide-react'
 
 interface EquipmentData {
-  category: 'hooks' | 'lures' | 'lines' | 'nets' | 'weights' | 'other'
+  category: 'hooks' | 'lures' | 'lines' | 'nets' | 'weights' | 'floats' | 'other'
   quantity: 'few' | 'many' | 'lots' | 'huge_haul' | '1-5m' | '5-10m' | '10-20m' | '20m+' | '1' | '2' | '3' | '4' | 'more'
   description?: string
 }
@@ -24,6 +24,7 @@ export default function EquipmentTracker({ onEquipmentChange }: Props) {
     { value: 'lines', label: 'Fiskelina', emoji: '🧵', description: 'Nylonlina, flätlina' },
     { value: 'nets', label: 'Nät', emoji: '🕸️', description: 'Fisknät, kastmaskinnät' },
     { value: 'weights', label: 'Vikter/Lod', emoji: '⚖️', description: 'Bly, tungsten' },
+    { value: 'floats', label: 'Flöten', emoji: '🎈', description: 'Flöten, dobber, kork' },
     { value: 'other', label: 'Övrigt', emoji: '🔧', description: 'Annan fiskeutrustning' }
   ] as const
 
@@ -238,6 +239,8 @@ export default function EquipmentTracker({ onEquipmentChange }: Props) {
                     ? 'T.ex. typ av lina (nylon, flätlina), tjocklek...'
                     : currentEquipment.category === 'nets'
                     ? 'T.ex. typ av nät, storlek, maskstorlek...'
+                    : currentEquipment.category === 'floats'
+                    ? 'T.ex. typ av flöte (kork, plast), storlek, färg...'
                     : 'T.ex. storlek på krokar, typ av beten...'
                 }
               />

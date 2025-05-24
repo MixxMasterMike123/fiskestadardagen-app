@@ -92,7 +92,7 @@ export default function GalleryPage() {
 
           {/* Impact Summary - Mobile Optimized */}
           {stats.totalSubmissions > 0 && (
-            <div className="mb-6 md:mb-8">
+            <div className="mb-6 md:mb-8 lg:hidden">
               <div className="bg-gradient-to-r from-green-500 to-blue-600 rounded-xl p-4 md:p-6 text-white">
                 <div className="flex items-center justify-between mb-3 md:mb-4">
                   <div className="flex items-center space-x-2 md:space-x-3">
@@ -141,111 +141,281 @@ export default function GalleryPage() {
             </div>
           ) : (
             <>
-              {/* Map Section */}
-              <div className="mb-8 md:mb-12">
-                <GalleryMap submissions={submissions} />
-              </div>
-              
-              {/* Gallery Grid */}
-              <div>
-                <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-4 md:mb-6">Alla godkända fynd</h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-                  {submissions.map((submission) => (
-                    <div key={submission.id} className="card">
-                      {/* Image Gallery */}
-                      <div className="mb-3 md:mb-4">
-                        {submission.images.length > 0 && (
-                          <div className="grid gap-2">
-                            <img
-                              src={submission.images[0]}
-                              alt="Återvunnen fiskeutrustning"
-                              className="w-full h-40 md:h-48 object-cover rounded-lg"
-                            />
-                            {submission.images.length > 1 && (
-                              <div className="grid grid-cols-3 gap-1">
-                                {submission.images.slice(1, 4).map((image, index) => (
-                                  <img
-                                    key={index}
-                                    src={image}
-                                    alt={`Bild ${index + 2}`}
-                                    className="w-full h-12 md:h-16 object-cover rounded"
-                                  />
-                                ))}
-                              </div>
-                            )}
-                          </div>
-                        )}
-                      </div>
-                      
-                      {/* Location */}
-                      <div className="flex items-center mb-2 md:mb-3">
-                        <MapPin className="h-3 w-3 md:h-4 md:w-4 text-accent mr-2 flex-shrink-0" />
-                        <span className="font-medium text-gray-900 text-sm md:text-base truncate">{submission.location}</span>
-                      </div>
-                      
-                      {/* Date */}
-                      <div className="flex items-center mb-2 md:mb-3">
-                        <Calendar className="h-3 w-3 md:h-4 md:w-4 text-gray-500 mr-2 flex-shrink-0" />
-                        <span className="text-xs md:text-sm text-gray-600">
-                          {submission.createdAt.toLocaleDateString('sv-SE')}
-                        </span>
-                      </div>
-                      
-                      {/* Equipment Info */}
-                      {submission.equipment && submission.equipment.length > 0 && (
-                        <div className="mb-2 md:mb-3 space-y-1">
-                          {submission.equipment.map((equipment, index) => (
-                            <div key={index} className="p-2 bg-orange-50 border border-orange-200 rounded-lg">
-                              <div className="flex items-center text-xs md:text-sm">
-                                <span className="text-sm md:text-lg mr-2 flex-shrink-0">
-                                  {equipment.category === 'hooks' && '🪝'}
-                                  {equipment.category === 'lures' && '🎣'}
-                                  {equipment.category === 'lines' && '🧵'}
-                                  {equipment.category === 'nets' && '🕸️'}
-                                  {equipment.category === 'weights' && '⚖️'}
-                                  {equipment.category === 'other' && '🔧'}
-                                </span>
-                                <div className="min-w-0 flex-1">
-                                  <span className="font-medium text-orange-800 block md:inline">
-                                    {equipment.category === 'hooks' && 'Krokar'}
-                                    {equipment.category === 'lures' && 'Beten/Drag'}
-                                    {equipment.category === 'lines' && 'Fiskelina'}
-                                    {equipment.category === 'nets' && 'Nät'}
-                                    {equipment.category === 'weights' && 'Vikter/Lod'}
-                                    {equipment.category === 'other' && 'Övrigt'}
-                                  </span>
-                                  <span className="text-orange-700 text-xs md:text-sm block md:inline md:ml-2">
-                                    {getQuantityLabel(equipment.category, equipment.quantity)}
-                                  </span>
-                                  {equipment.description && (
-                                    <div className="text-orange-600 text-xs mt-1 truncate">{equipment.description}</div>
+              {/* Desktop: Side-by-side Layout */}
+              <div className="hidden lg:grid lg:grid-cols-5 xl:grid-cols-3 lg:gap-8">
+                {/* Left: Gallery Content */}
+                <div className="lg:col-span-3 xl:col-span-2">
+                  <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-4 md:mb-6">Alla godkända fynd</h2>
+                  <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
+                    {submissions.map((submission) => (
+                      <div key={submission.id} className="card">
+                        {/* Image Gallery */}
+                        <div className="mb-3 md:mb-4">
+                          {submission.images.length > 0 && (
+                            <div className="grid gap-2">
+                              <img
+                                src={submission.images[0]}
+                                alt="Återvunnen fiskeutrustning"
+                                className="w-full h-40 md:h-48 object-cover rounded-lg cursor-pointer hover:opacity-95 transition-opacity"
+                                onClick={() => window.open(submission.images[0], '_blank')}
+                              />
+                              {submission.images.length > 1 && (
+                                <div className="grid grid-cols-3 gap-1">
+                                  {submission.images.slice(1, 4).map((image, index) => (
+                                    <img
+                                      key={index}
+                                      src={image}
+                                      alt={`Bild ${index + 2}`}
+                                      className="w-full h-12 md:h-16 object-cover rounded cursor-pointer hover:opacity-95 transition-opacity"
+                                      onClick={() => window.open(image, '_blank')}
+                                    />
+                                  ))}
+                                  {submission.images.length > 4 && (
+                                    <div className="w-full h-12 md:h-16 bg-gray-200 rounded flex items-center justify-center text-xs text-gray-600">
+                                      +{submission.images.length - 4}
+                                    </div>
                                   )}
                                 </div>
-                              </div>
+                              )}
                             </div>
-                          ))}
+                          )}
                         </div>
-                      )}
-                      
-                      {/* Message */}
-                      {submission.message && (
+                        
+                        {/* Location */}
+                        <div className="flex items-center mb-2 md:mb-3">
+                          <MapPin className="h-3 w-3 md:h-4 md:w-4 text-accent mr-2 flex-shrink-0" />
+                          <span className="font-medium text-gray-900 text-sm md:text-base truncate">{submission.location}</span>
+                        </div>
+                        
+                        {/* Date */}
+                        <div className="flex items-center mb-2 md:mb-3">
+                          <Calendar className="h-3 w-3 md:h-4 md:w-4 text-gray-500 mr-2 flex-shrink-0" />
+                          <span className="text-xs md:text-sm text-gray-600">
+                            {submission.createdAt.toLocaleDateString('sv-SE')}
+                          </span>
+                        </div>
+                        
+                        {/* Equipment Info */}
+                        {submission.equipment && submission.equipment.length > 0 && (
+                          <div className="mb-2 md:mb-3 space-y-1">
+                            {submission.equipment.map((equipment, index) => (
+                              <div key={index} className="p-2 bg-orange-50 border border-orange-200 rounded-lg">
+                                <div className="flex items-center text-xs md:text-sm">
+                                  <span className="text-sm md:text-lg mr-2 flex-shrink-0">
+                                    {equipment.category === 'hooks' && '🪝'}
+                                    {equipment.category === 'lures' && '🎣'}
+                                    {equipment.category === 'lines' && '🧵'}
+                                    {equipment.category === 'nets' && '🕸️'}
+                                    {equipment.category === 'weights' && '⚖️'}
+                                    {equipment.category === 'floats' && '🎈'}
+                                    {equipment.category === 'other' && '🔧'}
+                                  </span>
+                                  <div className="min-w-0 flex-1">
+                                    <span className="font-medium text-orange-800 block md:inline">
+                                      {equipment.category === 'hooks' && 'Krokar'}
+                                      {equipment.category === 'lures' && 'Beten/Drag'}
+                                      {equipment.category === 'lines' && 'Fiskelina'}
+                                      {equipment.category === 'nets' && 'Nät'}
+                                      {equipment.category === 'weights' && 'Vikter/Lod'}
+                                      {equipment.category === 'floats' && 'Flöten'}
+                                      {equipment.category === 'other' && 'Övrigt'}
+                                    </span>
+                                    <span className="text-orange-700 text-xs md:text-sm block md:inline md:ml-2">
+                                      {getQuantityLabel(equipment.category, equipment.quantity)}
+                                    </span>
+                                    {equipment.description && (
+                                      <div className="text-orange-600 text-xs mt-1 truncate">{equipment.description}</div>
+                                    )}
+                                  </div>
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                        
+                        {/* Message */}
+                        {submission.message && (
+                          <div className="mb-3 md:mb-4">
+                            <p className="text-gray-700 text-xs md:text-sm bg-gray-50 p-2 rounded border-l-4 border-accent">
+                              {submission.message}
+                            </p>
+                          </div>
+                        )}
+                        
+                        {/* Submitter */}
                         <div className="mb-3 md:mb-4">
-                          <p className="text-gray-700 text-xs md:text-sm bg-gray-50 p-2 rounded border-l-4 border-accent">
-                            {submission.message}
-                          </p>
+                          <span className="text-xs md:text-sm text-gray-600">Rapporterad av: </span>
+                          <span className="text-xs md:text-sm font-medium text-gray-900">{submission.name}</span>
                         </div>
-                      )}
-                      
-                      {/* Submitter */}
-                      <div className="mb-3 md:mb-4">
-                        <span className="text-xs md:text-sm text-gray-600">Rapporterad av: </span>
-                        <span className="text-xs md:text-sm font-medium text-gray-900">{submission.name}</span>
+                        
+                        {/* Social Share */}
+                        <SocialShare submission={submission} />
                       </div>
-                      
-                      {/* Social Share */}
-                      <SocialShare submission={submission} />
+                    ))}
+                  </div>
+                </div>
+                
+                {/* Right: Map & Impact Dashboard */}
+                <div className="lg:col-span-2 xl:col-span-1">
+                  <div className="sticky top-8 space-y-6">
+                    {/* Impact Summary - Desktop Sidebar */}
+                    {stats.totalSubmissions > 0 && (
+                      <div className="bg-gradient-to-r from-green-500 to-blue-600 rounded-xl p-4 lg:p-6 text-white">
+                        <div className="flex items-center justify-between mb-3 lg:mb-4">
+                          <div className="flex items-center space-x-2 lg:space-x-3">
+                            <TrendingUp className="h-5 w-5 lg:h-6 lg:w-6" />
+                            <h2 className="text-lg lg:text-xl font-bold">Total miljöpåverkan</h2>
+                          </div>
+                          <div className="text-xl lg:text-2xl">🌊</div>
+                        </div>
+                        
+                        <div className="grid grid-cols-1 gap-3 lg:gap-4">
+                          <div className="bg-white/10 rounded-lg p-3 lg:p-4 backdrop-blur-sm text-center">
+                            <div className="text-xl lg:text-2xl font-bold">{stats.totalSubmissions}</div>
+                            <div className="text-xs lg:text-sm text-green-100">Godkända rapporter</div>
+                          </div>
+                          <div className="bg-white/10 rounded-lg p-3 lg:p-4 backdrop-blur-sm text-center">
+                            <div className="text-xl lg:text-2xl font-bold">{formatNumber(stats.estimatedTotalPieces)}</div>
+                            <div className="text-xs lg:text-sm text-green-100">Uppskattade delar</div>
+                          </div>
+                          <div className="bg-white/10 rounded-lg p-3 lg:p-4 backdrop-blur-sm text-center">
+                            <div className="text-xl lg:text-2xl font-bold">{Math.round(stats.lineMeters + stats.netCount)}</div>
+                            <div className="text-xs lg:text-sm text-green-100">Meter lina + nät</div>
+                          </div>
+                        </div>
+                        
+                        <div className="mt-3 lg:mt-4 text-green-100 text-xs lg:text-sm">
+                          🎯 {getImpactMessage(stats)}
+                        </div>
+                      </div>
+                    )}
+                    
+                    {/* Map Section - Compact for Sidebar */}
+                    <div className="bg-white rounded-xl border border-gray-200 p-4 lg:p-6">
+                      <h3 className="text-lg font-bold text-gray-900 mb-4">Kartvy över fynd</h3>
+                      <GalleryMap submissions={submissions} />
                     </div>
-                  ))}
+                  </div>
+                </div>
+              </div>
+              
+              {/* Mobile/Tablet: Stacked Layout */}
+              <div className="block lg:hidden">
+                {/* Map Section */}
+                <div className="mb-8 md:mb-12">
+                  <GalleryMap submissions={submissions} />
+                </div>
+                
+                {/* Gallery Grid */}
+                <div>
+                  <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-4 md:mb-6">Alla godkända fynd</h2>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
+                    {submissions.map((submission) => (
+                      <div key={submission.id} className="card">
+                        {/* Image Gallery */}
+                        <div className="mb-3 md:mb-4">
+                          {submission.images.length > 0 && (
+                            <div className="grid gap-2">
+                              <img
+                                src={submission.images[0]}
+                                alt="Återvunnen fiskeutrustning"
+                                className="w-full h-40 md:h-48 object-cover rounded-lg cursor-pointer hover:opacity-95 transition-opacity"
+                                onClick={() => window.open(submission.images[0], '_blank')}
+                              />
+                              {submission.images.length > 1 && (
+                                <div className="grid grid-cols-3 gap-1">
+                                  {submission.images.slice(1, 4).map((image, index) => (
+                                    <img
+                                      key={index}
+                                      src={image}
+                                      alt={`Bild ${index + 2}`}
+                                      className="w-full h-12 md:h-16 object-cover rounded cursor-pointer hover:opacity-95 transition-opacity"
+                                      onClick={() => window.open(image, '_blank')}
+                                    />
+                                  ))}
+                                  {submission.images.length > 4 && (
+                                    <div className="w-full h-12 md:h-16 bg-gray-200 rounded flex items-center justify-center text-xs text-gray-600">
+                                      +{submission.images.length - 4}
+                                    </div>
+                                  )}
+                                </div>
+                              )}
+                            </div>
+                          )}
+                        </div>
+                        
+                        {/* Location */}
+                        <div className="flex items-center mb-2 md:mb-3">
+                          <MapPin className="h-3 w-3 md:h-4 md:w-4 text-accent mr-2 flex-shrink-0" />
+                          <span className="font-medium text-gray-900 text-sm md:text-base truncate">{submission.location}</span>
+                        </div>
+                        
+                        {/* Date */}
+                        <div className="flex items-center mb-2 md:mb-3">
+                          <Calendar className="h-3 w-3 md:h-4 md:w-4 text-gray-500 mr-2 flex-shrink-0" />
+                          <span className="text-xs md:text-sm text-gray-600">
+                            {submission.createdAt.toLocaleDateString('sv-SE')}
+                          </span>
+                        </div>
+                        
+                        {/* Equipment Info */}
+                        {submission.equipment && submission.equipment.length > 0 && (
+                          <div className="mb-2 md:mb-3 space-y-1">
+                            {submission.equipment.map((equipment, index) => (
+                              <div key={index} className="p-2 bg-orange-50 border border-orange-200 rounded-lg">
+                                <div className="flex items-center text-xs md:text-sm">
+                                  <span className="text-sm md:text-lg mr-2 flex-shrink-0">
+                                    {equipment.category === 'hooks' && '🪝'}
+                                    {equipment.category === 'lures' && '🎣'}
+                                    {equipment.category === 'lines' && '🧵'}
+                                    {equipment.category === 'nets' && '🕸️'}
+                                    {equipment.category === 'weights' && '⚖️'}
+                                    {equipment.category === 'floats' && '🎈'}
+                                    {equipment.category === 'other' && '🔧'}
+                                  </span>
+                                  <div className="min-w-0 flex-1">
+                                    <span className="font-medium text-orange-800 block md:inline">
+                                      {equipment.category === 'hooks' && 'Krokar'}
+                                      {equipment.category === 'lures' && 'Beten/Drag'}
+                                      {equipment.category === 'lines' && 'Fiskelina'}
+                                      {equipment.category === 'nets' && 'Nät'}
+                                      {equipment.category === 'weights' && 'Vikter/Lod'}
+                                      {equipment.category === 'floats' && 'Flöten'}
+                                      {equipment.category === 'other' && 'Övrigt'}
+                                    </span>
+                                    <span className="text-orange-700 text-xs md:text-sm block md:inline md:ml-2">
+                                      {getQuantityLabel(equipment.category, equipment.quantity)}
+                                    </span>
+                                    {equipment.description && (
+                                      <div className="text-orange-600 text-xs mt-1 truncate">{equipment.description}</div>
+                                    )}
+                                  </div>
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                        
+                        {/* Message */}
+                        {submission.message && (
+                          <div className="mb-3 md:mb-4">
+                            <p className="text-gray-700 text-xs md:text-sm bg-gray-50 p-2 rounded border-l-4 border-accent">
+                              {submission.message}
+                            </p>
+                          </div>
+                        )}
+                        
+                        {/* Submitter */}
+                        <div className="mb-3 md:mb-4">
+                          <span className="text-xs md:text-sm text-gray-600">Rapporterad av: </span>
+                          <span className="text-xs md:text-sm font-medium text-gray-900">{submission.name}</span>
+                        </div>
+                        
+                        {/* Social Share */}
+                        <SocialShare submission={submission} />
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
             </>

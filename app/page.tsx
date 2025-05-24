@@ -90,14 +90,14 @@ export default function HomePage() {
           )}
           
           {/* Desktop: Side-by-side Layout */}
-          <div className="hidden lg:grid lg:grid-cols-3 lg:gap-8">
-            {/* Left: Submission Form (2 columns) */}
-            <div className="lg:col-span-2">
+          <div className="hidden lg:grid lg:grid-cols-5 xl:grid-cols-3 lg:gap-8">
+            {/* Left: Submission Form */}
+            <div className="lg:col-span-3 xl:col-span-2">
               <SubmissionForm />
             </div>
             
-            {/* Right: Impact Dashboard (1 column) */}
-            <div className="lg:col-span-1">
+            {/* Right: Impact Dashboard */}
+            <div className="lg:col-span-2 xl:col-span-1">
               {loading ? (
                 <div className="bg-white rounded-xl border border-gray-200 p-8">
                   <div className="flex items-center justify-center">

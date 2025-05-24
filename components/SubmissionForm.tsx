@@ -17,7 +17,7 @@ interface FormData {
 }
 
 interface EquipmentData {
-  category: 'hooks' | 'lures' | 'lines' | 'nets' | 'weights' | 'other'
+  category: 'hooks' | 'lures' | 'lines' | 'nets' | 'weights' | 'floats' | 'other'
   quantity: 'few' | 'many' | 'lots' | 'huge_haul' | '1-5m' | '5-10m' | '10-20m' | '20m+' | '1' | '2' | '3' | '4' | 'more'
   description?: string
 }
@@ -25,14 +25,63 @@ interface EquipmentData {
 export default function SubmissionForm() {
   const [selectedImages, setSelectedImages] = useState<File[]>([])
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [imageUploading, setImageUploading] = useState(false)
   const [locationData, setLocationData] = useState<{address: string, lat: number, lng: number} | null>(null)
   const [equipmentData, setEquipmentData] = useState<EquipmentData[]>([])
-  const { register, handleSubmit, reset, setValue, formState: { errors } } = useForm<FormData>()
+  const { register, handleSubmit, reset, setValue, formState: { errors }, watch } = useForm<FormData>({
+    mode: 'onBlur',
+    reValidateMode: 'onBlur'
+  })
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
-      const newFiles = Array.from(e.target.files)
-      setSelectedImages(prev => [...prev, ...newFiles].slice(0, 5)) // Max 5 images
+      setImageUploading(true)
+      try {
+        const newFiles = Array.from(e.target.files)
+        
+        // Validate file types
+        const supportedTypes = [
+          'image/jpeg', 'image/jpg', 'image/png', 'image/webp', 
+          'image/heic', 'image/heif', 'image/avif'
+        ]
+        const supportedExtensions = ['.jpg', '.jpeg', '.png', '.webp', '.heic', '.heif', '.avif']
+        
+        const invalidFiles = newFiles.filter(file => {
+          const isValidType = supportedTypes.includes(file.type.toLowerCase())
+          const isValidExtension = supportedExtensions.some(ext => 
+            file.name.toLowerCase().endsWith(ext)
+          )
+          return !isValidType && !isValidExtension
+        })
+        
+        if (invalidFiles.length > 0) {
+          toast.error(`Ogiltiga filformat: ${invalidFiles.map(f => f.name).join(', ')}. Använd JPG, PNG, WEBP eller HEIC.`)
+          return
+        }
+        
+        // Validate file sizes (max 5MB each)
+        const oversizedFiles = newFiles.filter(file => file.size > 5 * 1024 * 1024)
+        if (oversizedFiles.length > 0) {
+          toast.error(`Följande bilder är för stora (max 5MB): ${oversizedFiles.map(f => f.name).join(', ')}`)
+          return
+        }
+        
+        const validFiles = newFiles.filter(file => 
+          file.size <= 5 * 1024 * 1024 && 
+          (supportedTypes.includes(file.type.toLowerCase()) || 
+           supportedExtensions.some(ext => file.name.toLowerCase().endsWith(ext)))
+        )
+        
+        setSelectedImages(prev => [...prev, ...validFiles].slice(0, 5)) // Max 5 images
+        
+        if (validFiles.length > 0) {
+          toast.success(`${validFiles.length} bild(er) tillagd${validFiles.length > 1 ? 'a' : ''}`)
+        }
+      } catch (error) {
+        toast.error('Fel vid bildhantering')
+      } finally {
+        setImageUploading(false)
+      }
     }
   }
 
@@ -58,13 +107,23 @@ export default function SubmissionForm() {
         location: locationData.address,
         equipment: equipmentData.length > 0 ? equipmentData : undefined
       }, selectedImages, locationData)
-      toast.success('Tack för din rapport! Den kommer att granskas innan publicering.')
+      
+      // Enhanced success feedback
+      toast.success(
+        '🎉 Tack för din rapport! Vi granskar den inom 24 timmar och publicerar den sedan i galleriet.',
+        { duration: 6000 }
+      )
+      
       reset()
       setSelectedImages([])
       setLocationData(null)
       setEquipmentData([])
+      
+      // Scroll to top for better UX
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+      
     } catch (error) {
-      toast.error('Något gick fel. Försök igen.')
+      toast.error('Något gick fel vid skickning. Kontrollera din internetanslutning och försök igen.')
     } finally {
       setIsSubmitting(false)
     }
@@ -94,6 +153,7 @@ export default function SubmissionForm() {
             <input
               {...register('name', { required: 'Du måste ange ditt namn' })}
               type="text"
+              autoComplete="name"
               className="input-field text-sm md:text-base"
               placeholder="Förnamn Efternamn"
             />
@@ -116,6 +176,8 @@ export default function SubmissionForm() {
                 }
               })}
               type="email"
+              autoComplete="email"
+              inputMode="email"
               className="input-field text-sm md:text-base"
               placeholder="din@email.se"
             />
@@ -132,6 +194,8 @@ export default function SubmissionForm() {
             <input
               {...register('phone', { required: 'Du måste ange ditt telefonnummer' })}
               type="tel"
+              autoComplete="tel"
+              inputMode="tel"
               className="input-field text-sm md:text-base"
               placeholder="070-123 45 67"
             />
@@ -169,24 +233,25 @@ export default function SubmissionForm() {
           {/* Image Upload */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              Foto av återvunnen utrustning *
+              Foto av återvunnen utrustning * {selectedImages.length > 0 && `(${selectedImages.length}/5)`}
             </label>
             <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 md:p-6 text-center">
               <input
                 type="file"
                 multiple
-                accept="image/*"
+                accept="image/*,.heic,.heif,.avif"
                 onChange={handleImageChange}
                 className="hidden"
                 id="image-upload"
+                disabled={imageUploading || isSubmitting}
               />
-              <label htmlFor="image-upload" className="cursor-pointer">
+              <label htmlFor="image-upload" className={`cursor-pointer ${imageUploading ? 'opacity-50' : ''}`}>
                 <Camera className="mx-auto h-8 w-8 md:h-12 md:w-12 text-gray-400" />
                 <p className="mt-2 text-sm text-gray-600">
-                  Klicka för att ladda upp bilder
+                  {imageUploading ? 'Bearbetar bilder...' : 'Klicka för att ladda upp bilder'}
                 </p>
                 <p className="text-xs text-gray-500">
-                  Välj en bild som visar den återvunna fiskeutrustningen
+                  Max 5 bilder, 5MB per bild • JPG, PNG, WEBP, HEIC, AVIF
                 </p>
               </label>
             </div>
@@ -225,7 +290,8 @@ export default function SubmissionForm() {
           <div className="sticky bottom-0 bg-white p-3 md:p-0 border-t md:border-0 -mx-4 md:mx-0 md:static md:bg-transparent">
             <button
               type="submit"
-              disabled={isSubmitting}
+              disabled={isSubmitting || imageUploading}
+              aria-label={isSubmitting ? 'Skickar rapport...' : 'Skicka in din rapport'}
               className="w-full btn-primary text-sm md:text-base py-3 md:py-2 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {isSubmitting ? 'Skickar...' : 'Skicka in rapport'}

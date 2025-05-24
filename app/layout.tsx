@@ -76,7 +76,29 @@ export default function RootLayout({
         </div>
         <BottomNav />
         <InstallPrompt />
-        <Toaster position="top-right" />
+        <Toaster 
+          position="top-center"
+          toastOptions={{
+            duration: 4000,
+            style: {
+              fontSize: '14px',
+              maxWidth: '90vw',
+              margin: '8px',
+            },
+            success: {
+              style: {
+                background: '#10b981',
+                color: 'white',
+              },
+            },
+            error: {
+              style: {
+                background: '#ef4444', 
+                color: 'white',
+              },
+            },
+          }}
+        />
       </body>
     </html>
   )

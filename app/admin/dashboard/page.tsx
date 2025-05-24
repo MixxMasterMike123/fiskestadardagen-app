@@ -333,12 +333,15 @@ export default function AdminDashboard() {
                                   <div>
                                     <span className="font-medium text-blue-800">Typ:</span>
                                     <span className="ml-2 text-blue-700">
-                                      {equipment.category === 'hooks' && '🪝 Krokar'}
-                                      {equipment.category === 'lures' && '🎣 Beten/Drag'}
-                                      {equipment.category === 'lines' && '🧵 Fiskelina'}
-                                      {equipment.category === 'nets' && '🕸️ Nät'}
-                                      {equipment.category === 'weights' && '⚖️ Vikter/Lod'}
-                                      {equipment.category === 'other' && '🔧 Övrigt'}
+                                      <span className="text-sm font-medium">
+                                        {equipment.category === 'hooks' && '🪝 Krokar'}
+                                        {equipment.category === 'lures' && '🎣 Beten/Drag'}
+                                        {equipment.category === 'lines' && '🧵 Fiskelina'}
+                                        {equipment.category === 'nets' && '🕸️ Nät'}
+                                        {equipment.category === 'weights' && '⚖️ Vikter/Lod'}
+                                        {equipment.category === 'floats' && '🎈 Flöten'}
+                                        {equipment.category === 'other' && '🔧 Övrigt'}
+                                      </span>
                                     </span>
                                   </div>
                                   <div>

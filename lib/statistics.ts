@@ -1,7 +1,7 @@
 import { Submission } from '@/types'
 
 export interface EquipmentStats {
-  category: 'hooks' | 'lures' | 'lines' | 'nets' | 'weights' | 'other'
+  category: 'hooks' | 'lures' | 'lines' | 'nets' | 'weights' | 'floats' | 'other'
   emoji: string
   name: string
   unit: string
@@ -36,6 +36,7 @@ export function calculateImpactStats(submissions: Submission[]): ImpactStats {
     lines: { count: 0, estimatedPieces: 0, ranges: [] },
     nets: { count: 0, estimatedPieces: 0, ranges: [] },
     weights: { count: 0, estimatedPieces: 0, ranges: [] },
+    floats: { count: 0, estimatedPieces: 0, ranges: [] },
     other: { count: 0, estimatedPieces: 0, ranges: [] }
   }
   
@@ -166,6 +167,14 @@ export function calculateImpactStats(submissions: Submission[]): ImpactStats {
       unit: 'st',
       estimatedCount: categoryStats.weights.estimatedPieces,
       rangeText: `${categoryStats.weights.count} rapporter`
+    },
+    {
+      category: 'floats' as const,
+      emoji: '🎈',
+      name: 'Flöten',
+      unit: 'st',
+      estimatedCount: categoryStats.floats.estimatedPieces,
+      rangeText: `${categoryStats.floats.count} rapporter`
     },
     {
       category: 'other' as const,

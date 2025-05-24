@@ -31,6 +31,7 @@ export default function SocialShare({ submission }: SocialShareProps) {
         'lines': '🧵',
         'nets': '🕸️',
         'weights': '⚖️',
+        'floats': '🎈',
         'other': '🔧'
       }[equipment.category] || '🎣'
 
@@ -40,7 +41,8 @@ export default function SocialShare({ submission }: SocialShareProps) {
         'lines': 'fiskelina',
         'nets': 'nät',
         'weights': 'vikter',
-        'other': 'utrustning'
+        'floats': 'flöten',
+        'other': 'övrigt'
       }[equipment.category] || 'utrustning'
 
       const quantityText = (() => {

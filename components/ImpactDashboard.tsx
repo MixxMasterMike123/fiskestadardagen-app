@@ -127,13 +127,16 @@ export default function ImpactDashboard({ submissions }: ImpactDashboardProps) {
 
       {/* No data message */}
       {stats.totalSubmissions === 0 && (
-        <div className="text-center py-6 lg:py-8">
+        <div className="text-center py-6 lg:py-8 bg-gradient-to-br from-blue-50 to-green-50 rounded-xl border border-blue-200">
           <div className="text-3xl lg:text-4xl mb-3 lg:mb-4">🎣</div>
           <h3 className="text-base lg:text-lg font-medium text-gray-900 mb-2">
             Inga godkända rapporter ännu
           </h3>
-          <p className="text-sm lg:text-base text-gray-600">
+          <p className="text-sm lg:text-base text-gray-600 mb-4">
             Bli den första att rapportera återvunnen fiskeutrustning!
+          </p>
+          <p className="text-xs text-gray-500">
+            Varje rapport hjälper till att hålla våra vatten rena 🌊
           </p>
         </div>
       )}
