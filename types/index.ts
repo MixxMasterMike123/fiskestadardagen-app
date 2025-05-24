@@ -4,6 +4,10 @@ export interface Submission {
   email: string;
   phone: string;
   location: string;
+  coordinates?: {
+    lat: number;
+    lng: number;
+  };
   message: string;
   images: string[];
   status: 'pending' | 'approved' | 'rejected';

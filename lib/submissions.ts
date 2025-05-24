@@ -11,7 +11,11 @@ interface SubmissionData {
   message: string
 }
 
-export async function submitReport(data: SubmissionData, images: File[]): Promise<void> {
+export async function submitReport(
+  data: SubmissionData, 
+  images: File[], 
+  coordinates?: {lat: number, lng: number}
+): Promise<void> {
   try {
     // Upload images first
     const imageUrls: string[] = []
@@ -26,6 +30,7 @@ export async function submitReport(data: SubmissionData, images: File[]): Promis
     // Create submission document
     const submissionData = {
       ...data,
+      coordinates,
       images: imageUrls,
       status: 'pending',
       createdAt: new Date(),

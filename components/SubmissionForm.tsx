@@ -5,6 +5,7 @@ import { useForm } from 'react-hook-form'
 import { toast } from 'react-hot-toast'
 import { Upload, X, Camera } from 'lucide-react'
 import { submitReport } from '@/lib/submissions'
+import LocationPicker from './LocationPicker'
 
 interface FormData {
   name: string
@@ -17,7 +18,8 @@ interface FormData {
 export default function SubmissionForm() {
   const [selectedImages, setSelectedImages] = useState<File[]>([])
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const { register, handleSubmit, reset, formState: { errors } } = useForm<FormData>()
+  const [locationData, setLocationData] = useState<{address: string, lat: number, lng: number} | null>(null)
+  const { register, handleSubmit, reset, setValue, formState: { errors } } = useForm<FormData>()
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
@@ -36,17 +38,31 @@ export default function SubmissionForm() {
       return
     }
 
+    if (!locationData) {
+      toast.error('Du måste välja en plats på kartan')
+      return
+    }
+
     setIsSubmitting(true)
     try {
-      await submitReport(data, selectedImages)
+      await submitReport({
+        ...data,
+        location: locationData.address
+      }, selectedImages, locationData)
       toast.success('Tack för din rapport! Den kommer att granskas innan publicering.')
       reset()
       setSelectedImages([])
+      setLocationData(null)
     } catch (error) {
       toast.error('Något gick fel. Försök igen.')
     } finally {
       setIsSubmitting(false)
     }
+  }
+
+  const handleLocationSelect = (location: {address: string, lat: number, lng: number}) => {
+    setLocationData(location)
+    setValue('location', location.address)
   }
 
   return (
@@ -119,18 +135,7 @@ export default function SubmissionForm() {
             <label className="block text-sm font-medium text-gray-700 mb-2">
               Plats *
             </label>
-            <input
-              {...register('location', { required: 'Du måste ange platsen där du hittade utrustningen' })}
-              type="text"
-              className="input-field"
-              placeholder="Skriv platsnamn (t.ex. Vänern, Göta älv)"
-            />
-            {errors.location && (
-              <p className="text-red-500 text-sm mt-1">{errors.location.message}</p>
-            )}
-            <p className="text-sm text-gray-500 mt-1">
-              Ange platsen där du hittade utrustningen
-            </p>
+            <LocationPicker onLocationSelect={handleLocationSelect} />
           </div>
 
           {/* Message */}

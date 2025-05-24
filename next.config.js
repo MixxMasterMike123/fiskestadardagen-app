@@ -6,6 +6,9 @@ const nextConfig = {
     domains: ['firebasestorage.googleapis.com'],
     unoptimized: true,
   },
+  env: {
+    NEXT_PUBLIC_GOOGLE_MAPS_API_KEY: 'AIzaSyBriBCgwiSg4PkhUJnPqHo1v0swzoqmLjk',
+  },
   webpack: (config, { isServer }) => {
     // Fix for Firebase/undici compatibility issue
     config.resolve.fallback = {
