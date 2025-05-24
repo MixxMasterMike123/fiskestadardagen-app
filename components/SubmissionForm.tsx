@@ -110,7 +110,7 @@ export default function SubmissionForm() {
       
       // Enhanced success feedback
       toast.success(
-        '🎉 Tack för din rapport! Vi granskar den inom 24 timmar och publicerar den sedan i galleriet.',
+        '🎉 Tack för din rapport! Vi granskar den inom några minuter och publicerar den sedan i galleriet.',
         { duration: 6000 }
       )
       
