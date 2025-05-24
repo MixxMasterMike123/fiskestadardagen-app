@@ -17,15 +17,6 @@ export default function LocationPicker({ onLocationSelect, initialLocation }: Lo
   const [isLoaded, setIsLoaded] = useState(false)
   const [selectedLocation, setSelectedLocation] = useState<string>(initialLocation || '')
 
-  // Cleanup function to properly remove markers
-  const clearMarkers = () => {
-    if (marker) {
-      marker.setMap(null)
-      marker.setVisible(false)
-      setMarker(null)
-    }
-  }
-
   useEffect(() => {
     const initMap = async () => {
       try {
@@ -83,25 +74,30 @@ export default function LocationPicker({ onLocationSelect, initialLocation }: Lo
     }
 
     initMap()
-    
-    // Cleanup on unmount
-    return () => {
-      clearMarkers()
-    }
   }, [])
 
   const updateMarker = async (location: google.maps.LatLng, mapInstance: google.maps.Map) => {
-    // Remove existing marker completely using our cleanup function
-    clearMarkers()
-
-    // Add new marker with animation
-    const newMarker = new google.maps.Marker({
-      position: location,
-      map: mapInstance,
-      title: 'Plats för fynd',
-      animation: google.maps.Animation.DROP // Nice animation for new pin
+    // Remove existing marker first - use callback to ensure state update
+    setMarker(currentMarker => {
+      if (currentMarker) {
+        currentMarker.setMap(null)
+        currentMarker.setVisible(false)
+      }
+      return null
     })
-    setMarker(newMarker)
+
+    // Small delay to ensure cleanup is complete
+    setTimeout(() => {
+      // Add new marker
+      const newMarker = new google.maps.Marker({
+        position: location,
+        map: mapInstance,
+        title: 'Plats för fynd',
+        animation: google.maps.Animation.DROP
+      })
+      
+      setMarker(newMarker)
+    }, 10)
 
     // Reverse geocode to get address
     const geocoder = new google.maps.Geocoder()
