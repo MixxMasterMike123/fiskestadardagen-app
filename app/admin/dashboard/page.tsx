@@ -9,7 +9,7 @@ import { Submission } from '@/types'
 import Header from '@/components/Header'
 import AdminMap from '@/components/AdminMap'
 import ImpactDashboard from '@/components/ImpactDashboard'
-import { CheckCircle, XCircle, Trash2, Eye, Calendar, MapPin, Phone, Mail, User } from 'lucide-react'
+import { CheckCircle, XCircle, Trash2, Eye, Calendar, MapPin, Phone, Mail, User, Download } from 'lucide-react'
 
 export default function AdminDashboard() {
   const [submissions, setSubmissions] = useState<Submission[]>([])
@@ -121,6 +121,86 @@ export default function AdminDashboard() {
     }
   }
 
+  const exportToCSV = () => {
+    const headers = [
+      'ID',
+      'Status',
+      'Namn',
+      'E-post',
+      'Telefon',
+      'Plats',
+      'Koordinater (Lat)',
+      'Koordinater (Lng)',
+      'Meddelande',
+      'Utrustning - Typ',
+      'Utrustning - Mängd',
+      'Utrustning - Beskrivning',
+      'Antal bilder',
+      'Rapporterad datum',
+      'Godkänd datum'
+    ]
+
+    const csvData = []
+    csvData.push(headers.join(','))
+
+    submissions.forEach(submission => {
+      const baseRow = [
+        submission.id,
+        submission.status,
+        `"${submission.name}"`,
+        submission.email,
+        submission.phone,
+        `"${submission.location}"`,
+        submission.coordinates?.lat || '',
+        submission.coordinates?.lng || '',
+        `"${submission.message || ''}"`,
+        '', // Equipment type (will be filled for each equipment item)
+        '', // Equipment quantity  
+        '', // Equipment description
+        submission.images.length,
+        submission.createdAt.toLocaleDateString('sv-SE'),
+        submission.approvedAt?.toLocaleDateString('sv-SE') || ''
+      ]
+
+      if (submission.equipment && submission.equipment.length > 0) {
+        submission.equipment.forEach(equipment => {
+          const equipmentRow = [...baseRow]
+          const categoryName = {
+            'hooks': 'Krokar',
+            'lures': 'Beten/Drag',
+            'lines': 'Fiskelina',
+            'weights': 'Vikter/Lod',
+            'floats': 'Flöten',
+            'other': 'Övrigt'
+          }[equipment.category] || equipment.category
+          
+          equipmentRow[9] = categoryName
+          equipmentRow[10] = getQuantityLabel(equipment.category, equipment.quantity)
+          equipmentRow[11] = `"${equipment.description || ''}"`
+          csvData.push(equipmentRow.join(','))
+        })
+      } else {
+        csvData.push(baseRow.join(','))
+      }
+    })
+
+    const csvContent = csvData.join('\n')
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' })
+    const link = document.createElement('a')
+    
+    if (link.download !== undefined) {
+      const url = URL.createObjectURL(blob)
+      link.setAttribute('href', url)
+      link.setAttribute('download', `fiskestadardagen_data_${new Date().toISOString().split('T')[0]}.csv`)
+      link.style.visibility = 'hidden'
+      document.body.appendChild(link)
+      link.click()
+      document.body.removeChild(link)
+    }
+    
+    toast.success(`Exporterade ${submissions.length} rapporter till CSV`)
+  }
+
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-50">
@@ -144,12 +224,22 @@ export default function AdminDashboard() {
               <h1 className="text-3xl font-bold text-gray-900">Administratörspanel</h1>
               <p className="text-gray-600">Hantera rapporter av återvunnen fiskeutrustning</p>
             </div>
-            <button
-              onClick={handleLogout}
-              className="btn-secondary"
-            >
-              Logga ut
-            </button>
+            <div className="flex space-x-3">
+              <button
+                onClick={exportToCSV}
+                disabled={submissions.length === 0}
+                className="flex items-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                <Download className="h-4 w-4 mr-2" />
+                Exportera data ({submissions.length})
+              </button>
+              <button
+                onClick={handleLogout}
+                className="btn-secondary"
+              >
+                Logga ut
+              </button>
+            </div>
           </div>
 
           {/* Statistics */}
