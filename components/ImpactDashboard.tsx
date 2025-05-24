@@ -2,8 +2,8 @@
 
 import { Submission } from '@/types'
 import { calculateImpactStats, formatNumber } from '@/lib/statistics'
-import { TrendingUp, Award, Droplets, Share2 } from 'lucide-react'
-import { toast } from 'react-hot-toast'
+import { TrendingUp, Award, Droplets } from 'lucide-react'
+import StatisticsShare from './StatisticsShare'
 
 interface ImpactDashboardProps {
   submissions: Submission[]
@@ -11,52 +11,6 @@ interface ImpactDashboardProps {
 
 export default function ImpactDashboard({ submissions }: ImpactDashboardProps) {
   const stats = calculateImpactStats(submissions)
-
-  const shareImpactStats = async () => {
-    const shareText = `🌊 Fantastiska resultat från Fiskestädardagen!
-
-📊 Hittills återvunnet:
-🎯 ${stats.totalSubmissions} rapporter godkända
-🧹 ${formatNumber(stats.estimatedTotalPieces)} delar fiskeutrustning
-🧵 ${Math.round(stats.lineMeters)} meter fiskelina
-
-Tillsammans håller vi våra svenska vatten rena! Varje bortplockat nät och krok gör skillnad för miljön. 
-
-#Fiskestädardagen #Miljö #Fiske #RenaVatten #Sverige #Miljöinsats`
-
-    const shareUrl = 'https://fiskestadardagen.web.app'
-    const fullShareText = `${shareText}\n\n👉 Gör din insats: ${shareUrl}`
-
-    // Try native share first
-    if (navigator.share) {
-      try {
-        await navigator.share({
-          title: 'Fiskestädardagen - Miljöpåverkan',
-          text: shareText,
-          url: shareUrl,
-        })
-      } catch (error) {
-        if ((error as any)?.name !== 'AbortError') {
-          copyToClipboard(fullShareText)
-        }
-      }
-    } else {
-      // Fallback to clipboard
-      copyToClipboard(fullShareText)
-    }
-  }
-
-  const copyToClipboard = async (text: string) => {
-    try {
-      await navigator.clipboard.writeText(text)
-      toast.success('📋 Statistik kopierad! Klistra in i ditt sociala media-inlägg.', { 
-        duration: 4000,
-        position: 'top-center'
-      })
-    } catch (error) {
-      toast.error('Kunde inte kopiera statistik')
-    }
-  }
 
   return (
     <div className="space-y-4 lg:space-y-6">
@@ -68,13 +22,7 @@ Tillsammans håller vi våra svenska vatten rena! Varje bortplockat nät och kro
             <h2 className="text-lg lg:text-xl font-bold">Total miljöpåverkan</h2>
           </div>
           <div className="flex items-center space-x-2">
-            <button
-              onClick={shareImpactStats}
-              className="p-2 bg-white/10 hover:bg-white/20 rounded-full transition-colors"
-              title="Dela statistik"
-            >
-              <Share2 className="h-4 w-4 lg:h-5 lg:w-5" />
-            </button>
+            <StatisticsShare stats={stats} />
             <div className="text-xl lg:text-2xl">🌊</div>
           </div>
         </div>
