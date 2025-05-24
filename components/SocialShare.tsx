@@ -77,7 +77,7 @@ Tillsammans håller vi våra svenska vatten rena. Varje bortplockat nät och kro
 
 #Fiskestädardagen #Miljö #Fiske #RenaVatten #Sverige`
 
-  const shareUrl = `https://fiskestadardagen.web.app/galleri`
+  const shareUrl = `https://app.fiskestadarna.se/galleri/`
   const fullShareText = `${shareText}\n\n👉 Se fler fynd: ${shareUrl}`
 
   // Social media URLs - Facebook and Twitter can include images via URL parameters
