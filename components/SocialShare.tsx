@@ -29,7 +29,6 @@ export default function SocialShare({ submission }: SocialShareProps) {
         'hooks': '🪝',
         'lures': '🎣', 
         'lines': '🧵',
-        'nets': '🕸️',
         'weights': '⚖️',
         'floats': '🎈',
         'other': '🔧'
@@ -39,7 +38,6 @@ export default function SocialShare({ submission }: SocialShareProps) {
         'hooks': 'krokar',
         'lures': 'beten',
         'lines': 'fiskelina',
-        'nets': 'nät',
         'weights': 'vikter',
         'floats': 'flöten',
         'other': 'övrigt'
@@ -54,17 +52,6 @@ export default function SocialShare({ submission }: SocialShareProps) {
             '20m+': '20m+'
           }
           return lineQuantities[equipment.quantity] || equipment.quantity
-        }
-        
-        if (equipment.category === 'nets') {
-          const netQuantities: Record<string, string> = {
-            '1': '1st',
-            '2': '2st', 
-            '3': '3st',
-            '4': '4st',
-            'more': '5+st'
-          }
-          return netQuantities[equipment.quantity] || equipment.quantity
         }
         
         const generalQuantities: Record<string, string> = {

@@ -4,8 +4,8 @@ import { useState } from 'react'
 import { Plus, X } from 'lucide-react'
 
 interface EquipmentData {
-  category: 'hooks' | 'lures' | 'lines' | 'nets' | 'weights' | 'floats' | 'other'
-  quantity: 'few' | 'many' | 'lots' | 'huge_haul' | '1-5m' | '5-10m' | '10-20m' | '20m+' | '1' | '2' | '3' | '4' | 'more'
+  category: 'hooks' | 'lures' | 'lines' | 'weights' | 'floats' | 'other'
+  quantity: 'few' | 'many' | 'lots' | 'huge_haul' | '1-5m' | '5-10m' | '10-20m' | '20m+'
   description?: string
 }
 
@@ -22,10 +22,9 @@ export default function EquipmentTracker({ onEquipmentChange }: Props) {
     { value: 'hooks', label: 'Krokar', emoji: '🪝', description: 'Fiskkrokar av olika storlekar' },
     { value: 'lures', label: 'Beten/Drag', emoji: '🎣', description: 'Spinnare, jigg, wobblers' },
     { value: 'lines', label: 'Fiskelina', emoji: '🧵', description: 'Nylonlina, flätlina' },
-    { value: 'nets', label: 'Nät', emoji: '🕸️', description: 'Fisknät, kastmaskinnät' },
     { value: 'weights', label: 'Vikter/Lod', emoji: '⚖️', description: 'Bly, tungsten' },
     { value: 'floats', label: 'Flöten', emoji: '🎈', description: 'Flöten, dobber, kork' },
-    { value: 'other', label: 'Övrigt', emoji: '🔧', description: 'Annan fiskeutrustning' }
+    { value: 'other', label: 'Övrigt', emoji: '🔧', description: 'Annan fiskeutrustning (nät, etc.)' }
   ] as const
 
   const quantities = [
@@ -40,14 +39,6 @@ export default function EquipmentTracker({ onEquipmentChange }: Props) {
     { value: '5-10m', label: '5-10 meter', description: 'Medellängd' },
     { value: '10-20m', label: '10-20 meter', description: 'Lång längd' },
     { value: '20m+', label: '20+ meter', description: 'Mycket lång längd' }
-  ] as const
-
-  const netQuantities = [
-    { value: '1', label: '1 nät', description: 'Ett nät' },
-    { value: '2', label: '2 nät', description: 'Två nät' },
-    { value: '3', label: '3 nät', description: 'Tre nät' },
-    { value: '4', label: '4 nät', description: 'Fyra nät' },
-    { value: 'more', label: '5+ nät', description: 'Fem eller fler nät' }
   ] as const
 
   const addEquipment = () => {
@@ -78,18 +69,12 @@ export default function EquipmentTracker({ onEquipmentChange }: Props) {
     if (currentEquipment.category === 'lines') {
       return lineQuantities
     }
-    if (currentEquipment.category === 'nets') {
-      return netQuantities
-    }
     return quantities
   }
 
   const getQuantityLabel = (category: string, quantity: string) => {
     if (category === 'lines') {
       return lineQuantities.find(q => q.value === quantity)?.label || quantity
-    }
-    if (category === 'nets') {
-      return netQuantities.find(q => q.value === quantity)?.label || quantity
     }
     return quantities.find(q => q.value === quantity)?.label || quantity
   }
@@ -201,8 +186,7 @@ export default function EquipmentTracker({ onEquipmentChange }: Props) {
             <div className="mb-2 md:mb-4">
               <label className="block text-xs md:text-sm font-medium text-gray-700 mb-2">
                 {currentEquipment.category === 'lines' && 'Längd *'}
-                {currentEquipment.category === 'nets' && 'Antal nät *'}
-                {currentEquipment.category !== 'lines' && currentEquipment.category !== 'nets' && 'Ungefärlig mängd *'}
+                {currentEquipment.category !== 'lines' && 'Ungefärlig mängd *'}
               </label>
               <div className="grid grid-cols-2 gap-2">
                 {getQuantityOptions().map((quantity) => (
@@ -237,8 +221,6 @@ export default function EquipmentTracker({ onEquipmentChange }: Props) {
                 placeholder={
                   currentEquipment.category === 'lines' 
                     ? 'T.ex. typ av lina (nylon, flätlina), tjocklek...'
-                    : currentEquipment.category === 'nets'
-                    ? 'T.ex. typ av nät, storlek, maskstorlek...'
                     : currentEquipment.category === 'floats'
                     ? 'T.ex. typ av flöte (kork, plast), storlek, färg...'
                     : 'T.ex. storlek på krokar, typ av beten...'

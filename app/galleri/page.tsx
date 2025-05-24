@@ -25,18 +25,6 @@ export default function GalleryPage() {
       }
     }
     
-    // Nets - show specific counts
-    if (category === 'nets') {
-      switch (quantity) {
-        case '1': return '1 nät'
-        case '2': return '2 nät'
-        case '3': return '3 nät'
-        case '4': return '4 nät'
-        case 'more': return '5+ nät'
-        default: return quantity
-      }
-    }
-    
     // Other equipment - show ranges
     switch (quantity) {
       case 'few': return 'Några få'
@@ -118,10 +106,10 @@ export default function GalleryPage() {
                     </div>
                   </div>
                   <div className="bg-white/10 rounded-lg p-2 md:p-4 backdrop-blur-sm text-center">
-                    <div className="text-lg md:text-2xl font-bold">{Math.round(stats.lineMeters + stats.netCount)}</div>
+                    <div className="text-lg md:text-2xl font-bold">{Math.round(stats.lineMeters)}</div>
                     <div className="text-green-100 text-xs md:text-sm">
-                      <span className="block md:hidden">m+nät</span>
-                      <span className="hidden md:block">Meter lina + nät</span>
+                      <span className="block md:hidden">meter lina</span>
+                      <span className="hidden md:block">Meter fiskelina</span>
                     </div>
                   </div>
                 </div>
@@ -205,7 +193,6 @@ export default function GalleryPage() {
                                     {equipment.category === 'hooks' && '🪝'}
                                     {equipment.category === 'lures' && '🎣'}
                                     {equipment.category === 'lines' && '🧵'}
-                                    {equipment.category === 'nets' && '🕸️'}
                                     {equipment.category === 'weights' && '⚖️'}
                                     {equipment.category === 'floats' && '🎈'}
                                     {equipment.category === 'other' && '🔧'}
@@ -215,7 +202,6 @@ export default function GalleryPage() {
                                       {equipment.category === 'hooks' && 'Krokar'}
                                       {equipment.category === 'lures' && 'Beten/Drag'}
                                       {equipment.category === 'lines' && 'Fiskelina'}
-                                      {equipment.category === 'nets' && 'Nät'}
                                       {equipment.category === 'weights' && 'Vikter/Lod'}
                                       {equipment.category === 'floats' && 'Flöten'}
                                       {equipment.category === 'other' && 'Övrigt'}
@@ -279,8 +265,8 @@ export default function GalleryPage() {
                             <div className="text-xs lg:text-sm text-green-100">Uppskattade delar</div>
                           </div>
                           <div className="bg-white/10 rounded-lg p-3 lg:p-4 backdrop-blur-sm text-center">
-                            <div className="text-xl lg:text-2xl font-bold">{Math.round(stats.lineMeters + stats.netCount)}</div>
-                            <div className="text-xs lg:text-sm text-green-100">Meter lina + nät</div>
+                            <div className="text-xl lg:text-2xl font-bold">{Math.round(stats.lineMeters)}</div>
+                            <div className="text-xs lg:text-sm text-green-100">Meter fiskelina</div>
                           </div>
                         </div>
                         
@@ -368,7 +354,6 @@ export default function GalleryPage() {
                                     {equipment.category === 'hooks' && '🪝'}
                                     {equipment.category === 'lures' && '🎣'}
                                     {equipment.category === 'lines' && '🧵'}
-                                    {equipment.category === 'nets' && '🕸️'}
                                     {equipment.category === 'weights' && '⚖️'}
                                     {equipment.category === 'floats' && '🎈'}
                                     {equipment.category === 'other' && '🔧'}
@@ -378,7 +363,6 @@ export default function GalleryPage() {
                                       {equipment.category === 'hooks' && 'Krokar'}
                                       {equipment.category === 'lures' && 'Beten/Drag'}
                                       {equipment.category === 'lines' && 'Fiskelina'}
-                                      {equipment.category === 'nets' && 'Nät'}
                                       {equipment.category === 'weights' && 'Vikter/Lod'}
                                       {equipment.category === 'floats' && 'Flöten'}
                                       {equipment.category === 'other' && 'Övrigt'}

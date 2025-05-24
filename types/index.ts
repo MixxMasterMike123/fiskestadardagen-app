@@ -11,8 +11,8 @@ export interface Submission {
   message: string;
   images: string[];
   equipment?: Array<{
-    category: 'hooks' | 'lures' | 'lines' | 'nets' | 'weights' | 'floats' | 'other';
-    quantity: 'few' | 'many' | 'lots' | 'huge_haul' | '1-5m' | '5-10m' | '10-20m' | '20m+' | '1' | '2' | '3' | '4' | 'more';
+    category: 'hooks' | 'lures' | 'lines' | 'weights' | 'floats' | 'other';
+    quantity: 'few' | 'many' | 'lots' | 'huge_haul' | '1-5m' | '5-10m' | '10-20m' | '20m+';
     description?: string;
     adminAdjustedCount?: number;
   }>;

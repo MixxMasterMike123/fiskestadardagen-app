@@ -1,7 +1,7 @@
 import { Submission } from '@/types'
 
 export interface EquipmentStats {
-  category: 'hooks' | 'lures' | 'lines' | 'nets' | 'weights' | 'floats' | 'other'
+  category: 'hooks' | 'lures' | 'lines' | 'weights' | 'floats' | 'other'
   emoji: string
   name: string
   unit: string
@@ -14,7 +14,6 @@ export interface ImpactStats {
   totalEquipmentItems: number
   estimatedTotalPieces: number
   lineMeters: number
-  netCount: number
   equipmentByCategory: EquipmentStats[]
 }
 
@@ -24,7 +23,6 @@ export function calculateImpactStats(submissions: Submission[]): ImpactStats {
   let totalEquipmentItems = 0
   let estimatedTotalPieces = 0
   let lineMeters = 0
-  let netCount = 0
   
   const categoryStats: Record<string, {
     count: number
@@ -34,7 +32,6 @@ export function calculateImpactStats(submissions: Submission[]): ImpactStats {
     hooks: { count: 0, estimatedPieces: 0, ranges: [] },
     lures: { count: 0, estimatedPieces: 0, ranges: [] },
     lines: { count: 0, estimatedPieces: 0, ranges: [] },
-    nets: { count: 0, estimatedPieces: 0, ranges: [] },
     weights: { count: 0, estimatedPieces: 0, ranges: [] },
     floats: { count: 0, estimatedPieces: 0, ranges: [] },
     other: { count: 0, estimatedPieces: 0, ranges: [] }
@@ -68,31 +65,6 @@ export function calculateImpactStats(submissions: Submission[]): ImpactStats {
             case '20m+':
               estimatedCount = 25 // Conservative estimate
               lineMeters += 25
-              break
-          }
-          categoryStats[category].ranges.push(equipment.quantity)
-        } else if (category === 'nets') {
-          // Nets - specific counts
-          switch (equipment.quantity) {
-            case '1':
-              estimatedCount = 1
-              netCount += 1
-              break
-            case '2':
-              estimatedCount = 2
-              netCount += 2
-              break
-            case '3':
-              estimatedCount = 3
-              netCount += 3
-              break
-            case '4':
-              estimatedCount = 4
-              netCount += 4
-              break
-            case 'more':
-              estimatedCount = 6 // Conservative estimate for 5+
-              netCount += 6
               break
           }
           categoryStats[category].ranges.push(equipment.quantity)
@@ -153,14 +125,6 @@ export function calculateImpactStats(submissions: Submission[]): ImpactStats {
       rangeText: `${categoryStats.lines.count} rapporter`
     },
     {
-      category: 'nets' as const,
-      emoji: '🕸️',
-      name: 'Nät',
-      unit: 'st',
-      estimatedCount: netCount,
-      rangeText: `${categoryStats.nets.count} rapporter`
-    },
-    {
       category: 'weights' as const,
       emoji: '⚖️',
       name: 'Vikter/Lod',
@@ -191,7 +155,6 @@ export function calculateImpactStats(submissions: Submission[]): ImpactStats {
     totalEquipmentItems,
     estimatedTotalPieces,
     lineMeters,
-    netCount,
     equipmentByCategory
   }
 }
@@ -211,10 +174,6 @@ export function getImpactMessage(stats: ImpactStats): string {
   
   if (stats.lineMeters > 0) {
     messages.push(`🧵 ${Math.round(stats.lineMeters)} meter fiskelina`)
-  }
-  
-  if (stats.netCount > 0) {
-    messages.push(`🕸️ ${stats.netCount} nät`)
   }
   
   return messages.join(' • ')

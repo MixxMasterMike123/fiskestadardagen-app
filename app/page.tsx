@@ -73,8 +73,8 @@ export default function HomePage() {
                     <div className="text-xs text-green-100">delar</div>
                   </div>
                   <div>
-                    <div className="text-lg font-bold">{Math.round(stats.lineMeters + stats.netCount)}</div>
-                    <div className="text-xs text-green-100">m+nät</div>
+                    <div className="text-lg font-bold">{Math.round(stats.lineMeters)}</div>
+                    <div className="text-xs text-green-100">meter lina</div>
                   </div>
                 </div>
                 

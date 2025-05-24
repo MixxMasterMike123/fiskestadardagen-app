@@ -31,18 +31,6 @@ export default function AdminDashboard() {
       }
     }
     
-    // Nets - show specific counts
-    if (category === 'nets') {
-      switch (quantity) {
-        case '1': return '1 nät'
-        case '2': return '2 nät'
-        case '3': return '3 nät'
-        case '4': return '4 nät'
-        case 'more': return '5+ nät'
-        default: return quantity
-      }
-    }
-    
     // Other equipment - show ranges
     switch (quantity) {
       case 'few': return 'Några få (1-10)'
@@ -337,7 +325,6 @@ export default function AdminDashboard() {
                                         {equipment.category === 'hooks' && '🪝 Krokar'}
                                         {equipment.category === 'lures' && '🎣 Beten/Drag'}
                                         {equipment.category === 'lines' && '🧵 Fiskelina'}
-                                        {equipment.category === 'nets' && '🕸️ Nät'}
                                         {equipment.category === 'weights' && '⚖️ Vikter/Lod'}
                                         {equipment.category === 'floats' && '🎈 Flöten'}
                                         {equipment.category === 'other' && '🔧 Övrigt'}

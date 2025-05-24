@@ -36,14 +36,14 @@ export default function ImpactDashboard({ submissions }: ImpactDashboardProps) {
           </div>
 
           <div className="bg-white/10 rounded-lg p-3 lg:p-4 backdrop-blur-sm text-center">
-            <div className="text-xl lg:text-2xl font-bold">{Math.round(stats.lineMeters + stats.netCount)}</div>
-            <div className="text-xs lg:text-sm text-green-100">Meter lina + nät</div>
+            <div className="text-xl lg:text-2xl font-bold">{Math.round(stats.lineMeters)}</div>
+            <div className="text-xs lg:text-sm text-green-100">Meter fiskelina</div>
           </div>
         </div>
         
         {/* Summary line - More compact on sidebar */}
         <div className="mt-3 lg:mt-4 text-green-100 text-xs lg:text-sm">
-          🎯 {stats.totalSubmissions} rapporter • 📊 {formatNumber(stats.estimatedTotalPieces)} delar • 🧵 {Math.round(stats.lineMeters)}m • 🕸️ {stats.netCount} nät
+          🎯 {stats.totalSubmissions} rapporter • 📊 {formatNumber(stats.estimatedTotalPieces)} delar • 🧵 {Math.round(stats.lineMeters)}m fiskelina
         </div>
       </div>
 
@@ -81,12 +81,6 @@ export default function ImpactDashboard({ submissions }: ImpactDashboardProps) {
                       Det motsvarar {Math.round(equipment.estimatedCount / 10)} fiskespön!
                     </div>
                   )}
-                  
-                  {equipment.category === 'nets' && equipment.estimatedCount >= 5 && (
-                    <div className="text-xs text-blue-600 font-medium">
-                      Viktig miljövinst - nät är extremt skadliga
-                    </div>
-                  )}
                 </div>
               </div>
             ))}
@@ -107,18 +101,11 @@ export default function ImpactDashboard({ submissions }: ImpactDashboardProps) {
               att mikroplaster sprids i våra vatten. Tillsammans gör vi verklig skillnad!
             </p>
             
-            {(stats.lineMeters > 0 || stats.netCount > 0) && (
-              <div className="mt-2 lg:mt-3 space-y-1">
-                {stats.lineMeters > 0 && (
-                  <div className="text-xs text-green-700">
-                    🧵 {Math.round(stats.lineMeters)} meter fiskelina = mindre risk för fåglar och marina djur
-                  </div>
-                )}
-                {stats.netCount > 0 && (
-                  <div className="text-xs text-green-700">
-                    🕸️ {stats.netCount} nät = förhindrat spökfiske som kan pågå i åratal
-                  </div>
-                )}
+            {stats.lineMeters > 0 && (
+              <div className="mt-2 lg:mt-3">
+                <div className="text-xs text-green-700">
+                  🧵 {Math.round(stats.lineMeters)} meter fiskelina = mindre risk för fåglar och marina djur
+                </div>
               </div>
             )}
           </div>
