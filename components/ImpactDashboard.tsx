@@ -13,46 +13,37 @@ export default function ImpactDashboard({ submissions }: ImpactDashboardProps) {
 
   return (
     <div className="space-y-6">
-      {/* Main Impact Header */}
-      <div className="bg-gradient-to-r from-accent to-orange-600 rounded-xl p-6 text-white">
-        <div className="flex items-center justify-between">
-          <div>
-            <h2 className="text-2xl font-bold mb-2">Miljöpåverkan Hittills</h2>
-            <p className="text-orange-100">Tillsammans gör vi skillnad för våra vatten</p>
+      {/* Main Impact Header - Updated to match gallery gradient */}
+      <div className="bg-gradient-to-r from-green-500 to-blue-600 rounded-xl p-6 text-white">
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center space-x-3">
+            <TrendingUp className="h-6 w-6" />
+            <h2 className="text-xl font-bold">Total miljöpåverkan</h2>
           </div>
-          <div className="text-4xl opacity-80">
-            🌊
-          </div>
+          <div className="text-2xl">🌊</div>
         </div>
 
-        {/* Key Metrics */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
-          <div className="bg-white/10 rounded-lg p-4 backdrop-blur-sm">
-            <div className="flex items-center space-x-2 mb-2">
-              <Award className="h-5 w-5" />
-              <span className="font-medium">Rapporter</span>
-            </div>
+        {/* Key Metrics - More compact grid */}
+        <div className="grid grid-cols-3 gap-4">
+          <div className="bg-white/10 rounded-lg p-4 backdrop-blur-sm text-center">
             <div className="text-2xl font-bold">{stats.totalSubmissions}</div>
-            <div className="text-sm text-orange-100">Godkända fynd</div>
+            <div className="text-sm text-green-100">Godkända rapporter</div>
           </div>
 
-          <div className="bg-white/10 rounded-lg p-4 backdrop-blur-sm">
-            <div className="flex items-center space-x-2 mb-2">
-              <TrendingUp className="h-5 w-5" />
-              <span className="font-medium">Utrustning</span>
-            </div>
+          <div className="bg-white/10 rounded-lg p-4 backdrop-blur-sm text-center">
             <div className="text-2xl font-bold">{formatNumber(stats.estimatedTotalPieces)}</div>
-            <div className="text-sm text-orange-100">Uppskattade delar</div>
+            <div className="text-sm text-green-100">Uppskattade delar</div>
           </div>
 
-          <div className="bg-white/10 rounded-lg p-4 backdrop-blur-sm">
-            <div className="flex items-center space-x-2 mb-2">
-              <Droplets className="h-5 w-5" />
-              <span className="font-medium">Renare vatten</span>
-            </div>
-            <div className="text-2xl font-bold">{stats.totalEquipmentItems}</div>
-            <div className="text-sm text-orange-100">Olika föremål</div>
+          <div className="bg-white/10 rounded-lg p-4 backdrop-blur-sm text-center">
+            <div className="text-2xl font-bold">{Math.round(stats.lineMeters + stats.netCount)}</div>
+            <div className="text-sm text-green-100">Meter lina + nät</div>
           </div>
+        </div>
+        
+        {/* Summary line */}
+        <div className="mt-4 text-green-100 text-sm">
+          🎯 {stats.totalSubmissions} rapporter godkända • 📊 Uppskattningsvis {formatNumber(stats.estimatedTotalPieces)} delar återvunna • 🧵 {Math.round(stats.lineMeters)} meter fiskelina • 🕸️ {stats.netCount} nät
         </div>
       </div>
 
