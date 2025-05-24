@@ -48,7 +48,7 @@ export default function HomePage() {
           
           {/* Compact Mobile Impact Stats */}
           {!loading && stats.totalSubmissions > 0 && (
-            <div className="block md:hidden">
+            <div className="block lg:hidden">
               <div className="bg-gradient-to-r from-green-500 to-blue-600 rounded-lg p-4 text-white">
                 <div className="flex items-center justify-between mb-3">
                   <div className="flex items-center space-x-2">
@@ -89,22 +89,34 @@ export default function HomePage() {
             </div>
           )}
           
-          {/* Desktop Impact Dashboard */}
-          <div className="hidden md:block">
-            {loading ? (
-              <div className="bg-white rounded-xl border border-gray-200 p-8">
-                <div className="flex items-center justify-center">
-                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-accent"></div>
-                  <span className="ml-3 text-gray-600">Laddar statistik...</span>
+          {/* Desktop: Side-by-side Layout */}
+          <div className="hidden lg:grid lg:grid-cols-3 lg:gap-8">
+            {/* Left: Submission Form (2 columns) */}
+            <div className="lg:col-span-2">
+              <SubmissionForm />
+            </div>
+            
+            {/* Right: Impact Dashboard (1 column) */}
+            <div className="lg:col-span-1">
+              {loading ? (
+                <div className="bg-white rounded-xl border border-gray-200 p-8">
+                  <div className="flex items-center justify-center">
+                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-accent"></div>
+                    <span className="ml-3 text-gray-600">Laddar statistik...</span>
+                  </div>
                 </div>
-              </div>
-            ) : (
-              <ImpactDashboard submissions={submissions} />
-            )}
+              ) : (
+                <div className="sticky top-8">
+                  <ImpactDashboard submissions={submissions} />
+                </div>
+              )}
+            </div>
           </div>
           
-          {/* Submission Form */}
-          <SubmissionForm />
+          {/* Mobile/Tablet: Stacked Layout */}
+          <div className="block lg:hidden">
+            <SubmissionForm />
+          </div>
         </div>
       </main>
     </div>
